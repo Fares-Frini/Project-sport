@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../ParaPharma.Core/ParaPharma.Core.csproj" />
+  <Project Path="../ParaPharma.DWH/ParaPharma.DWH.csproj" />
+  <Project Path="../ParaPharma.Infrastructure/ParaPharma.Infrastructure.csproj" />
+  <Project Path="ParaPharma.API.csproj" />
+</Solution>
