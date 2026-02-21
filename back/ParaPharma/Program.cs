@@ -12,15 +12,10 @@ using BCrypt.Net;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- CORS ---
-// En production, FRONTEND_URL est défini dans les variables d'environnement Render
-// En développement, on autorise localhost:4200
-var allowedOrigins = (builder.Configuration["AllowedOrigins"] ?? "http://localhost:4200")
-    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
-        policy => policy.WithOrigins(allowedOrigins)
+        policy => policy.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
