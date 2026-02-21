@@ -1,0 +1,77 @@
+.navbar-wrapper {
+    position: fixed;
+    top: 20px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0 20px;
+    pointer-events: none;
+}
+
+.navbar-floating {
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 16px;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-md);
+}
+
+.logo-link {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+}
+
+.nav-link-premium {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+
+    &:hover,
+    &.active-premium {
+        background: var(--primary-light);
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+}
+
+.cart-btn {
+    font-size: 1.3rem;
+    padding: 8px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.03);
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.06);
+        transform: scale(1.05);
+    }
+
+    .badge {
+        font-size: 0.65rem;
+        padding: 0.4em 0.6em;
+    }
+}
+
+.btn-logout {
+    background: none;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #fee2e2;
+        transform: scale(1.1);
+    }
+}

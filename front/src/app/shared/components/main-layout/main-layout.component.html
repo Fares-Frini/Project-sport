@@ -1,0 +1,15 @@
+<div class="main-layout-wrapper" style="padding-top: 100px;">
+  <app-navbar></app-navbar>
+
+  <div class="main-container d-flex flex-grow-1">
+    <aside *ngIf="showSidebar" class="admin-sidebar shadow-sm">
+      <app-sidebar></app-sidebar>
+    </aside>
+
+    <main class="content-area flex-grow-1 p-0 container">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <app-footer></app-footer>
+</div>

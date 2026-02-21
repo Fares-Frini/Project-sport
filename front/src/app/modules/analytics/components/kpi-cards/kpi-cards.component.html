@@ -1,0 +1,34 @@
+<div class="row g-4 mb-4" *ngIf="kpis">
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <h6 class="text-uppercase mb-2">Chiffre d'Affaires</h6>
+                <h2 class="mb-0">{{ kpis.totalRevenue | currency:'USD' }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <h6 class="text-uppercase mb-2">Commandes</h6>
+                <h2 class="mb-0">{{ kpis.totalOrders | number }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-warning text-dark h-100">
+            <div class="card-body">
+                <h6 class="text-uppercase mb-2">Panier Moyen</h6>
+                <h2 class="mb-0">{{ kpis.avgOrderValue | currency:'USD' }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6">
+        <div class="card bg-danger text-white h-100">
+            <div class="card-body">
+                <h6 class="text-uppercase mb-2">Clients</h6>
+                <h2 class="mb-0">{{ kpis.totalCustomers | number }}</h2>
+            </div>
+        </div>
+    </div>
+</div>

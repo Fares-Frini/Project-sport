@@ -1,0 +1,75 @@
+<div class="container-fluid py-5 min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-8 col-lg-6 col-xl-5">
+        <div class="card premium-card glass-effect border-0 p-4">
+            <div class="text-center mb-4">
+                <div class="icon-box bg-primary-soft mx-auto mb-3">✨</div>
+                <h2 class="fw-bold text-gradient">Créer un compte</h2>
+                <p class="text-muted">Rejoignez-nous pour une expérience personnalisée</p>
+            </div>
+
+            <div *ngIf="error" class="alert alert-danger border-0 rounded-3 small mb-4">
+                {{error}}
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                <div class="form-floating mb-3">
+                    <input class="form-control bg-transparent" id="inputFullName" type="text" formControlName="fullName"
+                        placeholder="Nom complet" [ngClass]="{ 'is-invalid': submitted && f['fullName'].errors }" />
+                    <label for="inputFullName">Nom complet</label>
+                    <div *ngIf="submitted && f['fullName'].errors" class="invalid-feedback">
+                        <div *ngIf="f['fullName'].errors['required']">Nom complet requis</div>
+                    </div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class="form-control bg-transparent" id="inputEmail" type="email" formControlName="email"
+                        placeholder="name@example.com" [ngClass]="{ 'is-invalid': submitted && f['email'].errors }" />
+                    <label for="inputEmail">Adresse Email</label>
+                    <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                        <div *ngIf="f['email'].errors['required']">L'email est requis</div>
+                        <div *ngIf="f['email'].errors['email']">Format d'email invalide</div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control bg-transparent" id="inputPassword" type="password"
+                                formControlName="password" placeholder="Mot de passe"
+                                [ngClass]="{ 'is-invalid': submitted && f['password'].errors }" />
+                            <label for="inputPassword">Mot de passe</label>
+                            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+                                <div *ngIf="f['password'].errors['required']">Requis</div>
+                                <div *ngIf="f['password'].errors['minlength']">Min. 6 caractères</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input class="form-control bg-transparent" id="inputPasswordConfirm" type="password"
+                                formControlName="confirmPassword" placeholder="Confirmer mot de passe"
+                                [ngClass]="{ 'is-invalid': submitted && f['confirmPassword'].errors }" />
+                            <label for="inputPasswordConfirm">Confirmation</label>
+                            <div *ngIf="submitted && f['confirmPassword'].errors" class="invalid-feedback">
+                                <div *ngIf="f['confirmPassword'].errors['required']">Requis</div>
+                                <div *ngIf="f['confirmPassword'].errors['mustMatch']">Incohérent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-premium btn-primary w-100 py-3 mb-4" [disabled]="loading">
+                    <span *ngIf="!loading">S'inscrire</span>
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                </button>
+            </form>
+
+            <div class="text-center">
+                <p class="text-muted small mb-0">
+                    Déjà membre ?
+                    <a routerLink="/auth/login" class="text-primary fw-bold text-decoration-none">Se connecter</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<mat-nav-list class="sidebar-list">
+    <div class="sidebar-header p-3">
+        <h3 class="text-primary fw-bold mb-0">SportStore Admin</h3>
+        <p class="text-muted small">Gestion des Equipements</p>
+    </div>
+
+    <div class="px-3 pb-3">
+        <a routerLink="/"
+            class="btn btn-premium btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
+            <mat-icon>home</mat-icon> Accueil Site
+        </a>
+    </div>
+    <mat-divider></mat-divider>
+
+    <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>Tableau de Bord</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/articles" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Produits</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/users" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <span matListItemTitle>Utilisateurs</span>
+    </a>
+
+    <mat-divider></mat-divider>
+
+    <div class="sidebar-section p-3">
+        <p class="text-muted small text-uppercase">Outils</p>
+    </div>
+
+    <a mat-list-item routerLink="/categories" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>category</mat-icon>
+        <span matListItemTitle>Catégories</span>
+    </a>
+
+    <a mat-list-item routerLink="/subcategories" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>account_tree</mat-icon>
+        <span matListItemTitle>Sous-catégories</span>
+    </a>
+</mat-nav-list>

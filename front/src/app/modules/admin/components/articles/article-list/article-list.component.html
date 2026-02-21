@@ -1,0 +1,56 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-0 brand-font">Gestion des Produits</h1>
+            <p class="text-muted small">Inventaire AdventureWorks (Standes / Bikes / etc.)</p>
+        </div>
+        <button mat-raised-button color="primary" routerLink="/admin/articles/create"
+            class="btn btn-premium btn-primary d-flex align-items-center gap-2">
+            <mat-icon>add</mat-icon> Nouveau Produit
+        </button>
+    </div>
+
+    <div class="mat-elevation-z8 premium-card">
+        <table mat-table [dataSource]="products" class="w-100">
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Désignation </th>
+                <td mat-cell *matCellDef="let product" class="fw-bold"> {{product.name}} </td>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="subCategoryName">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Sous-Catégorie </th>
+                <td mat-cell *matCellDef="let product">
+                    <span class="badge bg-secondary-soft text-secondary small">{{product.subCategoryName ||
+                        'N/A'}}</span>
+                </td>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="listPrice">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Prix de vente </th>
+                <td mat-cell *matCellDef="let product">
+                    <span class="text-primary fw-bold">{{product.listPrice | currency:'USD'}}</span>
+                </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Actions </th>
+                <td mat-cell *matCellDef="let product">
+                    <button mat-icon-button color="accent" (click)="editArticle(product.id)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteArticle(product.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="product-row"></tr>
+        </table>
+    </div>
+</div>

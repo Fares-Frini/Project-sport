@@ -1,0 +1,402 @@
+﻿
+> parapharmacy-app@0.0.0 build
+> ng build
+
+node.exe : - 
+Generating browser 
+application bundles 
+(phase: setup)...
+Au caractère Ligne:1 
+: 1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (- Gener   
+ ating br...hase:    
+ setup)...:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+Ô£ö Browser 
+application bundle 
+generation complete.
+Ô£ö Browser 
+application bundle 
+generation complete.
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+21:76 - error 
+TS2339: Property 
+'activeDiscountPct' 
+does not exist on 
+type 'Product'.
+
+21                 
+<h2 
+class="text-primary 
+mb-0" [class.text-dan
+ger]="product.activeD
+iscountPct > 0">
+                     
+                     
+                     
+               
+~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+22:33 - error 
+TS2339: Property 
+'activeDiscountPct' 
+does not exist on 
+type 'Product'.
+
+22                   
+  {{ (product.activeD
+iscountPct > 0 ? 
+(product.listPrice * 
+(1 - product.activeDi
+scountPct / 100)) :
+                     
+              
+~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+22:66 - error 
+TS2339: Property 
+'listPrice' does not 
+exist on type 
+'Product'.
+
+22                   
+  {{ (product.activeD
+iscountPct > 0 ? 
+(product.listPrice * 
+(1 - product.activeDi
+scountPct / 100)) :
+                     
+                     
+                     
+     ~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+22:91 - error 
+TS2339: Property 
+'activeDiscountPct' 
+does not exist on 
+type 'Product'.
+
+22                   
+  {{ (product.activeD
+iscountPct > 0 ? 
+(product.listPrice * 
+(1 - product.activeDi
+scountPct / 100)) :
+                     
+                     
+                     
+                     
+         
+~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+23:29 - error 
+TS2339: Property 
+'listPrice' does not 
+exist on type 
+'Product'.
+
+23                   
+  product.listPrice) 
+| currency:'USD' }}
+                     
+          ~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+25:91 - error 
+TS2339: Property 
+'activeDiscountPct' 
+does not exist on 
+type 'Product'.
+
+25                 
+<span 
+class="text-muted tex
+t-decoration-line-thr
+ough fs-4" *ngIf="pro
+duct.activeDiscountPc
+t > 0">
+                     
+                     
+                     
+                     
+         
+~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+26:31 - error 
+TS2339: Property 
+'listPrice' does not 
+exist on type 
+'Product'.
+
+26                   
+  
+{{product.listPrice 
+| currency:'USD'}}
+                     
+            ~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+29:36 - error 
+TS2339: Property 
+'activeDiscountPct' 
+does not exist on 
+type 'Product'.
+
+29                   
+  *ngIf="product.acti
+veDiscountPct > 0">-{
+{product.activeDiscou
+ntPct}}%</span>
+                     
+                 
+~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+29:70 - error 
+TS2339: Property 
+'activeDiscountPct' 
+does not exist on 
+type 'Product'.
+
+29                   
+  *ngIf="product.acti
+veDiscountPct > 0">-{
+{product.activeDiscou
+ntPct}}%</span>
+                     
+                     
+                     
+         
+~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+Error: src/app/module
+s/user/components/art
+icle-detail/product-d
+etail.component.html:
+32:44 - error 
+TS2339: Property 
+'activeDiscountDesc' 
+does not exist on 
+type 'Product'.
+
+32             <p 
+class="lead mb-4">{{p
+roduct.activeDiscount
+Desc || 'Produit de 
+haute performance Adv
+entureWorks.'}}</p>
+                     
+                     
+    
+~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/use
+r/components/article-
+detail/product-detail
+.component.ts:9:16
+    9   templateUrl: 
+'./product-detail.com
+ponent.html',
+                     
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~
+    Error occurs in 
+the template of 
+component ProductDeta
+ilComponent.
+
+
+

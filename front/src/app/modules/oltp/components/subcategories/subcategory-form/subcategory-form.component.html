@@ -1,0 +1,44 @@
+<h2 mat-dialog-title class="brand-font">{{ isEditMode ? 'Modifier' : 'Ajouter' }} une Sous-Catégorie</h2>
+
+<form [formGroup]="subCategoryForm" (ngSubmit)="onSubmit()">
+    <mat-dialog-content>
+        <div class="row g-3 py-2">
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Nom de la Sous-Catégorie</mat-label>
+                    <input matInput formControlName="name" placeholder="Ex: Vélos de Route">
+                    <mat-error *ngIf="subCategoryForm.get('name')?.hasError('required')">Le nom est
+                        obligatoire</mat-error>
+                    <mat-error *ngIf="subCategoryForm.get('name')?.hasError('minlength')">Minimum 3
+                        caractères</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Catégorie Parente</mat-label>
+                    <mat-select formControlName="categoryId">
+                        <mat-option *ngFor="let cat of categories" [value]="cat.id">
+                            {{ cat.name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="subCategoryForm.get('categoryId')?.hasError('required')">
+                        La catégorie parente est obligatoire
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div *ngIf="error" class="alert alert-danger mt-3 py-2 small">
+            {{ error }}
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="pb-3 px-3">
+        <button type="button" mat-button (click)="onCancel()">Annuler</button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="subCategoryForm.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+        </button>
+    </mat-dialog-actions>
+</form>

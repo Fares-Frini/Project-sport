@@ -1,0 +1,144 @@
+<div class="container-fluid py-5" *ngIf="kpis$ | async as kpi">
+    <div class="header-section mb-5">
+        <h1 class="display-5 fw-bold text-gradient brand-font">SportStore - Administration</h1>
+        <p class="text-muted">Exploitation des données <strong>AdventureWorks 2019</strong> en temps réel.</p>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card premium-card h-100 border-start border-4 border-primary">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box bg-primary-soft me-3">💰</div>
+                        <h6 class="card-subtitle text-muted mb-0">Revenu Total</h6>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0 text-primary">{{ kpi.totalRevenue | currency:'USD' }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card premium-card h-100 border-start border-4 border-success">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box bg-success-soft me-3">🛒</div>
+                        <h6 class="card-subtitle text-muted mb-0">Commandes</h6>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0 text-success">{{ kpi.totalOrders }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card premium-card h-100 border-start border-4 border-info">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box bg-info-soft me-3">📦</div>
+                        <h6 class="card-subtitle text-muted mb-0">Produits</h6>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0 text-info">{{ kpi.totalProducts }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card premium-card h-100 border-start border-4 border-warning">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="icon-box bg-warning-soft me-3">📁</div>
+                        <h6 class="card-subtitle text-muted mb-0">Catégories</h6>
+                    </div>
+                    <h2 class="display-6 fw-bold mb-0 text-warning">{{ kpi.totalCategories }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-8">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">Évolution des Ventes</h5>
+                </div>
+                <div class="card-body p-4">
+                    <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">Répartition par Catégorie</h5>
+                </div>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                    <canvas baseChart [data]="pieChartData" [type]="pieChartType">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DWH Section -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-12">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">Répartition des Utilisateurs (DWH)</h5>
+                </div>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center" style="max-height: 400px;">
+                    <canvas baseChart [data]="personTypeChartData" [type]="'pie'">
+                    </canvas>
+                </div>
+                <div class="card-footer bg-transparent border-0 p-3 text-center">
+                    <small class="text-muted">Données extraites de AdventureWorks DimPerson</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-4">
+        <div class="col-lg-12">
+            <div class="card premium-card glass-effect border-0">
+                <div class="card-header bg-transparent border-0 p-4 pb-0">
+                    <h5 class="fw-bold mb-0 brand-font">Actions Rapides d'Administration</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-sm-3">
+                            <a routerLink="/admin/articles"
+                                class="btn btn-premium btn-primary w-100 p-3 d-flex align-items-center justify-content-center gap-2">
+                                <mat-icon>inventory_2</mat-icon> Produits
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a routerLink="/categories"
+                                class="btn btn-premium btn-success w-100 p-3 d-flex align-items-center justify-content-center gap-2">
+                                <mat-icon>category</mat-icon> Catégories
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a routerLink="/subcategories"
+                                class="btn btn-premium btn-info w-100 p-3 d-flex align-items-center justify-content-center gap-2">
+                                <mat-icon>account_tree</mat-icon> Sous-catégories
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a routerLink="/admin/users"
+                                class="btn btn-premium btn-warning w-100 p-3 d-flex align-items-center justify-content-center gap-2">
+                                <mat-icon>people</mat-icon> Utilisateurs
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <button
+                                class="btn btn-outline-primary w-100 p-3 d-flex align-items-center justify-content-center gap-2"
+                                (click)="ngOnInit()">
+                                <mat-icon>refresh</mat-icon> Actualiser
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

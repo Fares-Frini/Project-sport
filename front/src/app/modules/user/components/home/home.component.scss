@@ -1,0 +1,59 @@
+.home-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+}
+
+.hero-premium {
+    border: 1px solid var(--glass-border);
+    background: white;
+}
+
+.bg-primary-soft {
+    background: #eef2ff;
+}
+
+.bg-success-soft {
+    background: #ecfdf5;
+}
+
+.product-card {
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+
+        img {
+            transform: scale(1.05);
+        }
+    }
+}
+
+.btn-white {
+    background: white;
+    border: none;
+
+    &:hover {
+        background: #f8fafc;
+        transform: rotate(5deg);
+    }
+}
+
+.extra-small {
+    font-size: 0.7rem;
+}
+
+.hero-image-placeholder {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+}

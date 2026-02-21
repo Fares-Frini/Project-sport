@@ -1,0 +1,261 @@
+
+> parapharmacy-app@0.0.0 build
+> ng build
+
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+✔ Browser application bundle generation complete.
+
+Error: src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:3:33 - error TS2307: Cannot find module '../../../../core/services/category.service' or its corresponding type declarations.
+
+3 import { CategoryService } from '../../../../core/services/category.service';
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:4:36 - error TS2307: Cannot find module '../../../../core/services/subcategory.service' or its corresponding type declarations.
+
+4 import { SubCategoryService } from '../../../../core/services/subcategory.service';
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:5:26 - error TS2307: Cannot find module '../../../../core/models/category.model' or its corresponding type declarations.
+
+5 import { Category } from '../../../../core/models/category.model';
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:6:29 - error TS2307: Cannot find module '../../../../core/models/subcategory.model' or its corresponding type declarations.
+
+6 import { SubCategory } from '../../../../core/models/subcategory.model';
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:20:13 - error NG2003: No suitable injection token for parameter 'categoryService' of class 'CategoryDetailComponent'.
+  Consider using the @Inject decorator to specify an injection token.
+
+20     private categoryService: CategoryService,
+               ~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:20:30
+    20     private categoryService: CategoryService,
+                                    ~~~~~~~~~~~~~~~
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: src/app/modules/oltp/components/categories/category-form/category-form.component.ts:4:33 - error TS2307: Cannot find module '../../../../core/services/category.service' or its corresponding type declarations.
+
+4 import { CategoryService } from '../../../../core/services/category.service';
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-form/category-form.component.ts:21:13 - error NG2003: No suitable injection token for parameter 'categoryService' of class 'CategoryFormComponent'.
+  Consider using the @Inject decorator to specify an injection token.
+
+21     private categoryService: CategoryService,
+               ~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/categories/category-form/category-form.component.ts:21:30
+    21     private categoryService: CategoryService,
+                                    ~~~~~~~~~~~~~~~
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: src/app/modules/oltp/components/categories/category-list/category-list.component.ts:2:33 - error TS2307: Cannot find module '../../../../core/services/category.service' or its corresponding type declarations.
+
+2 import { CategoryService } from '../../../../core/services/category.service';
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-list/category-list.component.ts:3:26 - error TS2307: Cannot find module '../../../../core/models/category.model' or its corresponding type declarations.
+
+3 import { Category } from '../../../../core/models/category.model';
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-list/category-list.component.ts:4:29 - error TS2307: Cannot find module '../../../../core/services/auth.service' or its corresponding type declarations.
+
+4 import { AuthService } from '../../../../core/services/auth.service';
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/categories/category-list/category-list.component.ts:17:13 - error NG2003: No suitable injection token for parameter 'categoryService' of class 'CategoryListComponent'.
+  Consider using the @Inject decorator to specify an injection token.
+
+17     private categoryService: CategoryService,
+               ~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/categories/category-list/category-list.component.ts:17:30
+    17     private categoryService: CategoryService,
+                                    ~~~~~~~~~~~~~~~
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-detail/subcategory-detail.component.ts:3:36 - error TS2307: Cannot find module '../../../../core/services/subcategory.service' or its corresponding type declarations.
+
+3 import { SubCategoryService } from '../../../../core/services/subcategory.service';
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-detail/subcategory-detail.component.ts:4:33 - error TS2307: Cannot find module '../../../../core/services/category.service' or its corresponding type declarations.
+
+4 import { CategoryService } from '../../../../core/services/category.service';
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-detail/subcategory-detail.component.ts:5:29 - error TS2307: Cannot find module '../../../../core/models/subcategory.model' or its corresponding type declarations.
+
+5 import { SubCategory } from '../../../../core/models/subcategory.model';
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-detail/subcategory-detail.component.ts:19:13 - error NG2003: No suitable injection token for parameter 'subCategoryService' of class 'SubcategoryDetailComponent'.
+  Consider using the @Inject decorator to specify an injection token.
+
+19     private subCategoryService: SubCategoryService,
+               ~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/subcategories/subcategory-detail/subcategory-detail.component.ts:19:33
+    19     private subCategoryService: SubCategoryService,
+                                       ~~~~~~~~~~~~~~~~~~
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-form/subcategory-form.component.ts:4:36 - error TS2307: Cannot find module '../../../../core/services/subcategory.service' or its corresponding type declarations.
+
+4 import { SubCategoryService } from '../../../../core/services/subcategory.service';
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-form/subcategory-form.component.ts:5:33 - error TS2307: Cannot find module '../../../../core/services/category.service' or its corresponding type declarations.
+
+5 import { CategoryService } from '../../../../core/services/category.service';
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-form/subcategory-form.component.ts:6:26 - error TS2307: Cannot find module '../../../../core/models/category.model' or its corresponding type declarations.
+
+6 import { Category } from '../../../../core/models/category.model';
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-form/subcategory-form.component.ts:24:13 - error NG2003: No suitable injection token for parameter 'subCategoryService' of class 'SubcategoryFormComponent'.
+  Consider using the @Inject decorator to specify an injection token.
+
+24     private subCategoryService: SubCategoryService,
+               ~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/subcategories/subcategory-form/subcategory-form.component.ts:24:33
+    24     private subCategoryService: SubCategoryService,
+                                       ~~~~~~~~~~~~~~~~~~
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:2:36 - error TS2307: Cannot find module '../../../../core/services/subcategory.service' or its corresponding type declarations.
+
+2 import { SubCategoryService } from '../../../../core/services/subcategory.service';
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:3:33 - error TS2307: Cannot find module '../../../../core/services/category.service' or its corresponding type declarations.
+
+3 import { CategoryService } from '../../../../core/services/category.service';
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:4:29 - error TS2307: Cannot find module '../../../../core/models/subcategory.model' or its corresponding type declarations.
+
+4 import { SubCategory } from '../../../../core/models/subcategory.model';
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:5:26 - error TS2307: Cannot find module '../../../../core/models/category.model' or its corresponding type declarations.
+
+5 import { Category } from '../../../../core/models/category.model';
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:6:29 - error TS2307: Cannot find module '../../../../core/services/auth.service' or its corresponding type declarations.
+
+6 import { AuthService } from '../../../../core/services/auth.service';
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Error: src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:22:13 - error NG2003: No suitable injection token for parameter 'subCategoryService' of class 'SubcategoryListComponent'.
+  Consider using the @Inject decorator to specify an injection token.
+
+22     private subCategoryService: SubCategoryService,
+               ~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:22:33
+    22     private subCategoryService: SubCategoryService,
+                                       ~~~~~~~~~~~~~~~~~~
+    This type does not have a value, so it cannot be used as injection token.
+
+
+Error: src/app/modules/oltp/oltp.module.ts:16:5 - error NG6001: The class 'CategoryListComponent' is listed in the declarations of the NgModule 'OltpModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+16     CategoryListComponent,
+       ~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/categories/category-list/category-list.component.ts:11:14
+    11 export class CategoryListComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~~~~~
+    'CategoryListComponent' is declared here.
+
+
+Error: src/app/modules/oltp/oltp.module.ts:17:5 - error NG6001: The class 'CategoryFormComponent' is listed in the declarations of the NgModule 'OltpModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+17     CategoryFormComponent,
+       ~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/categories/category-form/category-form.component.ts:11:14
+    11 export class CategoryFormComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~~~~~
+    'CategoryFormComponent' is declared here.
+
+
+Error: src/app/modules/oltp/oltp.module.ts:18:5 - error NG6001: The class 'CategoryDetailComponent' is listed in the declarations of the NgModule 'OltpModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+18     CategoryDetailComponent,
+       ~~~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/categories/category-detail/category-detail.component.ts:13:14
+    13 export class CategoryDetailComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~~~~~~~
+    'CategoryDetailComponent' is declared here.
+
+
+Error: src/app/modules/oltp/oltp.module.ts:19:5 - error NG6001: The class 'SubcategoryListComponent' is listed in the declarations of the NgModule 'OltpModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+19     SubcategoryListComponent,
+       ~~~~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/subcategories/subcategory-list/subcategory-list.component.ts:13:14
+    13 export class SubcategoryListComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+    'SubcategoryListComponent' is declared here.
+
+
+Error: src/app/modules/oltp/oltp.module.ts:20:5 - error NG6001: The class 'SubcategoryFormComponent' is listed in the declarations of the NgModule 'OltpModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+20     SubcategoryFormComponent,
+       ~~~~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/subcategories/subcategory-form/subcategory-form.component.ts:13:14
+    13 export class SubcategoryFormComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~
+    'SubcategoryFormComponent' is declared here.
+
+
+Error: src/app/modules/oltp/oltp.module.ts:21:5 - error NG6001: The class 'SubcategoryDetailComponent' is listed in the declarations of the NgModule 'OltpModule', but is not a directive, a component, or a pipe. Either remove it from the NgModule's declarations, or add an appropriate Angular decorator.
+
+21     SubcategoryDetailComponent
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  src/app/modules/oltp/components/subcategories/subcategory-detail/subcategory-detail.component.ts:12:14
+    12 export class SubcategoryDetailComponent implements OnInit {
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    'SubcategoryDetailComponent' is declared here.
+
+
+

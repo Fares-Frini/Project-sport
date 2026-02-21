@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Tableau de Bord</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" (click)="loadDashboardData()">
+            <span data-feather="calendar"></span>
+            Cette année
+        </button>
+    </div>
+</div>
+
+<app-kpi-cards [kpis]="kpis"></app-kpi-cards>
+
+<div class="row mb-4" *ngIf="!isLoading">
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Ventes par Catégorie</h6>
+            </div>
+            <div class="card-body">
+                <app-sales-charts [type]="'bar'" [data]="salesByCategoryData"></app-sales-charts>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Top 10 Villes</h6>
+            </div>
+            <div class="card-body">
+                <app-sales-charts [type]="'bar'" [data]="salesByCityData"
+                    [options]="{ indexAxis: 'y' }"></app-sales-charts>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4" *ngIf="!isLoading">
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Évolution des Ventes</h6>
+            </div>
+            <div class="card-body">
+                <app-sales-charts [type]="'line'" [data]="salesTrendData" [options]="trendOptions"></app-sales-charts>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Répartition par Pays</h6>
+            </div>
+            <div class="card-body">
+                <app-sales-charts [type]="'doughnut'" [data]="salesByCountryData"
+                    [options]="{ maintainAspectRatio: false }"></app-sales-charts>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-top-products-table [products]="topProducts"></app-top-products-table>
+
+<div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+    </div>
+</div>

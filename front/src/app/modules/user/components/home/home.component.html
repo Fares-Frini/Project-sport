@@ -1,0 +1,85 @@
+<div class="home-wrapper py-4">
+    <!-- Hero Section Premium -->
+    <section class="hero-premium glass-effect mb-5 p-5 rounded-4 overflow-hidden position-relative">
+        <div class="row align-items-center position-relative z-1">
+            <div class="col-lg-7">
+                <span class="badge bg-primary-soft text-primary mb-3 px-3 py-2 rounded-pill fw-bold">Performance 2026
+                    ⚡</span>
+                <h1 class="display-3 brand-font mb-4">Dominez la route, <span class="text-gradient">atteignez vos
+                        sommets.</span>
+                </h1>
+                <p class="lead text-muted mb-5">Découvrez une sélection exclusive de vélos et accessoires AdventureWorks
+                    conçus pour la performance extrême.</p>
+                <div class="d-flex gap-3">
+                    <button class="btn btn-premium btn-primary px-5 py-3" (click)="viewCatalog()">Explorer la
+                        boutique</button>
+                    <button class="btn btn-outline-primary px-4 py-3 border-2 fw-bold">Offres Spéciales</button>
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="hero-image-placeholder glass-effect rounded-4 d-flex align-items-center justify-content-center"
+                    style="height: 350px;">
+                    <span style="font-size: 8rem;">🚴</span>
+                </div>
+            </div>
+        </div>
+        <!-- Decorative blobs -->
+        <div class="position-absolute top-0 end-0 bg-primary opacity-10 rounded-circle"
+            style="width: 300px; height: 300px; transform: translate(30%, -30%); filter: blur(50px);"></div>
+        <div class="position-absolute bottom-0 start-0 bg-secondary opacity-10 rounded-circle"
+            style="width: 200px; height: 200px; transform: translate(-30%, 30%); filter: blur(40px);"></div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 class="brand-font mb-1">Nos Best-Sellers 🔥</h2>
+                <p class="text-muted mb-0">La performance AdventureWorks entre vos mains</p>
+            </div>
+            <a routerLink="/catalog" class="text-primary fw-bold text-decoration-none">Voir tout →</a>
+        </div>
+        <div class="row g-4" *ngIf="(featuredProducts$ | async) as products">
+            <div class="col-md-3" *ngFor="let product of products">
+                <div class="card premium-card h-100 border-0 shadow-sm overflow-hidden"
+                    (click)="viewArticle(product.id)" style="cursor: pointer;">
+                    <div class="position-relative">
+                        <div class="product-placeholder bg-dark d-flex align-items-center justify-content-center"
+                            style="height: 220px;">
+                            <span style="font-size: 4rem;">📦</span>
+                        </div>
+                        <button class="btn btn-white shadow-sm position-absolute top-0 end-0 m-3 rounded-circle p-2"
+                            (click)="addToCart(product); $event.stopPropagation()" style="width: 40px; height: 40px;">
+                            🛒
+                        </button>
+                    </div>
+                    <div class="card-body p-4 pt-4">
+                        <div class="text-primary small fw-bold mb-1">{{ product.categoryName || 'Sporting Goods' }}
+                        </div>
+                        <h6 class="fw-bold mb-3 text-truncate">{{ product.name }}</h6>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="price-box">
+                                <div class="fw-bold fs-5 text-gradient">{{ product.price | currency:'USD' }}</div>
+                            </div>
+                            <span class="badge bg-success-soft text-success small">En stock</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Grid -->
+    <section class="mb-5">
+        <h2 class="brand-font mb-4">Parcourir les catégories</h2>
+        <div class="row g-3">
+            <div class="col-6 col-md-3"
+                *ngFor="let cat of ['🚴 Vélos', '🛠️ Composants', '👕 Vêtements', '🎒 Accessoires']">
+                <div class="card premium-card glass-effect border-0 p-4 text-center">
+                    <div class="fs-2 mb-2">{{ cat.split(' ')[0] }}</div>
+                    <div class="fw-bold text-main brand-font small">{{ cat.split(' ')[1] }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

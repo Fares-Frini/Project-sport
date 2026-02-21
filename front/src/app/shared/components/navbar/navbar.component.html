@@ -1,0 +1,41 @@
+<div class="navbar-wrapper">
+    <nav class="navbar-floating glass-effect">
+        <div class="container d-flex align-items-center justify-content-between p-2 px-4">
+            <a routerLink="/" class="logo-link d-flex align-items-center">
+                <span class="logo-icon me-2">🚴</span>
+                <span class="logo-text brand-font">Sport<span class="text-primary">Store</span></span>
+            </a>
+
+            <div class="nav-links d-none d-md-flex align-items-center gap-3">
+                <a routerLink="/home" routerLinkActive="active-premium" class="nav-link-premium">Accueil</a>
+                <a routerLink="/catalog" routerLinkActive="active-premium" class="nav-link-premium">Catalogue</a>
+                <ng-container *ngIf="currentUser$ | async as user">
+                    <a routerLink="/admin/dashboard" *ngIf="isAdmin(user)"
+                        class="nav-link-premium text-accent fw-bold">Admin</a>
+                </ng-container>
+            </div>
+
+            <div class="nav-actions d-flex align-items-center gap-3">
+                <a routerLink="/cart" class="cart-btn position-relative me-2 text-decoration-none">
+                    <span class="cart-icon">🛒</span>
+                    <span *ngIf="(cartCount$ | async) !== 0"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ cartCount$ | async }}
+                    </span>
+                </a>
+
+                <ng-container *ngIf="currentUser$ | async as user; else loginBtn">
+                    <div class="user-profile d-flex align-items-center gap-2">
+                        <span class="user-name text-muted d-none d-sm-inline">{{user.fullName}}</span>
+                        <button class="btn btn-logout border-0" (click)="logout()" title="Déconnexion">🚪</button>
+                    </div>
+                </ng-container>
+
+                <ng-template #loginBtn>
+                    <a routerLink="/auth/login"
+                        class="btn btn-premium btn-primary py-2 px-4 text-decoration-none">Connexion</a>
+                </ng-template>
+            </div>
+        </div>
+    </nav>
+</div>

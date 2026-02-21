@@ -1,0 +1,56 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0 brand-font">Gestion des Utilisateurs</h2>
+            <p class="text-muted small">Mise à jour des profils et rôles (Base Transactionnelle)</p>
+        </div>
+        <button class="btn btn-premium btn-primary d-flex align-items-center gap-2" (click)="openUserForm()">
+            <mat-icon>person_add</mat-icon> Nouvel Utilisateur
+        </button>
+    </div>
+
+    <div class="card premium-card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <table mat-table [dataSource]="users" class="w-100">
+                <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef> Nom Complet </th>
+                    <td mat-cell *matCellDef="let user"> {{ user.fullName }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef> Rôle </th>
+                    <td mat-cell *matCellDef="let user">
+                        <span class="badge" [ngClass]="user.role === 'Admin' ? 'bg-primary' : 'bg-secondary'">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="text-end px-4"> Actions </th>
+                    <td mat-cell *matCellDef="let user" class="text-end px-4">
+                        <button mat-icon-button color="primary" (click)="openUserForm(user)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['fullName', 'email', 'role', 'actions']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['fullName', 'email', 'role', 'actions']"></tr>
+            </table>
+
+            <div *ngIf="users.length === 0" class="p-5 text-center text-muted">
+                <mat-icon class="display-1 mb-3">group_off</mat-icon>
+                <p>Aucun utilisateur trouvé.</p>
+            </div>
+        </div>
+    </div>
+</div>

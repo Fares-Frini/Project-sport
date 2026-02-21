@@ -1,0 +1,32 @@
+<div class="card shadow-sm">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Top 10 Produits</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Produit</th>
+                    <th scope="col">Catégorie</th>
+                    <th scope="col">Sous-Catégorie</th>
+                    <th scope="col" class="text-end">Quantité</th>
+                    <th scope="col" class="text-end">CA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of products; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ product.productName }}</td>
+                    <td>{{ product.categoryName }}</td>
+                    <td>{{ product.subCategoryName }}</td>
+                    <td class="text-end">{{ product.totalSold | number }}</td>
+                    <td class="text-end">{{ product.totalRevenue | currency:'USD' }}</td>
+                </tr>
+                <tr *ngIf="products.length === 0">
+                    <td colspan="6" class="text-center py-3">Aucune donnée disponible</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

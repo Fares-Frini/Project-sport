@@ -1,0 +1,58 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="fw-bold mb-0 brand-font">Gestion des Catégories</h1>
+            <p class="text-muted small">Organisation des produits AdventureWorks 2019</p>
+        </div>
+        <button *ngIf="isAdmin" (click)="openCategoryForm()"
+            class="btn btn-premium btn-primary d-flex align-items-center gap-2">
+            <mat-icon>add</mat-icon> Nouvelle Catégorie
+        </button>
+    </div>
+
+    <div class="mat-elevation-z8 premium-card">
+        <table mat-table [dataSource]="categories" class="w-100">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> ID </th>
+                <td mat-cell *matCellDef="let category"> {{category.id}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Nom </th>
+                <td mat-cell *matCellDef="let category" class="fw-bold"> {{category.name}} </td>
+            </ng-container>
+
+            <!-- Count Column -->
+            <ng-container matColumnDef="subCategoryCount">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Sous-Catégories </th>
+                <td mat-cell *matCellDef="let category">
+                    <span class="badge bg-primary-soft text-primary small">{{category.subCategoryCount}}</span>
+                </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="brand-font"> Actions </th>
+                <td mat-cell *matCellDef="let category">
+                    <div *ngIf="isAdmin">
+                        <button mat-icon-button color="accent" (click)="openCategoryForm(category)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="deleteCategory(category.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="product-row"></tr>
+        </table>
+
+        <div *ngIf="isLoading" class="p-4 text-center">
+            <mat-spinner diameter="40" class="mx-auto"></mat-spinner>
+        </div>
+    </div>
+</div>

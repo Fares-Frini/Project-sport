@@ -1,0 +1,73 @@
+<div class="container py-5" *ngIf="product">
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <div class="product-placeholder bg-dark rounded shadow-sm d-flex align-items-center justify-content-center"
+                style="height: 500px;">
+                <span style="font-size: 8rem;">📦</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a routerLink="/catalog">Catalogue</a></li>
+                    <li class="breadcrumb-item active">{{product.name}}</li>
+                </ol>
+            </nav>
+
+            <p class="text-muted text-uppercase mb-1">{{product.categoryName || 'SportStore'}}</p>
+            <h1 class="display-5 fw-bold mb-3">{{product.name}}</h1>
+
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <h2 class="text-primary mb-0">
+                    {{ product.price | currency:'USD' }}
+                </h2>
+            </div>
+
+            <p class="lead mb-4">{{ product.description || 'Produit de haute performance SportStore.' }}</p>
+
+            <div class="mb-4">
+                <p class="fw-bold mb-2">Quantité</p>
+                <div class="d-flex align-items-center gap-2">
+                    <button mat-icon-button (click)="decrement()" [disabled]="quantity <= 1">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <span class="fs-4 px-3">{{quantity}}</span>
+                    <button mat-icon-button (click)="increment()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <button mat-raised-button color="primary" size="large" (click)="addToCart()">
+                    <mat-icon>shopping_cart</mat-icon> Ajouter au Panier
+                </button>
+                <button mat-button routerLink="/catalog">
+                    Retour au catalogue
+                </button>
+            </div>
+
+            <hr class="my-5">
+
+            <div class="row text-center service-features">
+                <div class="col-4">
+                    <mat-icon color="primary">local_shipping</mat-icon>
+                    <p class="small">Livraison rapide</p>
+                </div>
+                <div class="col-4">
+                    <mat-icon color="primary">security</mat-icon>
+                    <p class="small">Paiement sécurisé</p>
+                </div>
+                <div class="col-4">
+                    <mat-icon color="primary">support_agent</mat-icon>
+                    <p class="small">Conseils experts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5 text-center" *ngIf="!product">
+    <mat-spinner class="mx-auto"></mat-spinner>
+    <p class="mt-3">Chargement du produit...</p>
+</div>

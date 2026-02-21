@@ -1,0 +1,11 @@
+{
+    "buildCommand": "npm run build:prod",
+    "outputDirectory": "dist/parapharmacy-app",
+    "installCommand": "npm install",
+    "rewrites": [
+        {
+            "source": "/((?!api/.*).*)",
+            "destination": "/index.html"
+        }
+    ]
+}
