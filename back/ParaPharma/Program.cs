@@ -118,6 +118,9 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<OltpDbContext>();
 
+    // Create all tables from the EF Core model if they don't exist yet
+    db.Database.EnsureCreated();
+
     var adminEmail = app.Configuration["AdminSeed:Email"] ?? "admin@parapharma.com";
     var adminPassword = app.Configuration["AdminSeed:Password"] ?? "Admin@123456";
 
