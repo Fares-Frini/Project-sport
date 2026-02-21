@@ -7,6 +7,7 @@ using ParaPharma.Infrastructure.Data;
 using ParaPharma.Infrastructure.Services;
 using ParaPharma.Infrastructure.Repositories;
 using System.Text;
+using BCrypt.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -111,5 +112,28 @@ app.UseCors("AllowAngular"); // Add this before Authentication/Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// --- Seed default admin user on first deployment ---
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<OltpDbContext>();
+
+    var adminEmail = app.Configuration["AdminSeed:Email"] ?? "admin@parapharma.com";
+    var adminPassword = app.Configuration["AdminSeed:Password"] ?? "Admin@123456";
+
+    if (!db.AppUsers.Any(u => u.Role == "Admin"))
+    {
+        db.AppUsers.Add(new ParaPharma.Core.Entities.AppUser
+        {
+            FirstName = "Admin",
+            LastName  = "ParaPharma",
+            Email     = adminEmail.ToLower(),
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword),
+            Role      = "Admin"
+        });
+        db.SaveChanges();
+        Console.WriteLine($"[Seed] Admin user created: {adminEmail}");
+    }
+}
 
 app.Run();
