@@ -55,4 +55,28 @@ export class DashboardService {
             tap((data: any[]) => console.log('DashboardService: Person Distribution reçue:', data))
         );
     }
+
+    getTopProducts(limit: number): Observable<{ label: string; value: number }[]> {
+        return this.http.get<{ label: string; value: number }[]>(
+            `${environment.apiUrl}/analytics/top-products?limit=${limit}`
+        );
+    }
+
+    getSalesByTerritory(): Observable<{ label: string; value: number }[]> {
+        return this.http.get<{ label: string; value: number }[]>(
+            `${environment.apiUrl}/analytics/sales-by-territory`
+        );
+    }
+
+    getTopSalesPersons(limit: number): Observable<{ label: string; value: number }[]> {
+        return this.http.get<{ label: string; value: number }[]>(
+            `${environment.apiUrl}/analytics/top-salespersons?limit=${limit}`
+        );
+    }
+
+    getCreditCardsByType(): Observable<{ label: string; value: number }[]> {
+        return this.http.get<{ label: string; value: number }[]>(
+            `${environment.apiUrl}/analytics/credit-cards-by-type`
+        );
+    }
 }

@@ -51,4 +51,12 @@ export class ProductService {
     delete(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
+
+    getCustomImageUrl(productId: number): string | null {
+        return localStorage.getItem(`product_image_${productId}`);
+    }
+
+    saveCustomImageUrl(productId: number, imageUrl: string): void {
+        localStorage.setItem(`product_image_${productId}`, imageUrl);
+    }
 }
