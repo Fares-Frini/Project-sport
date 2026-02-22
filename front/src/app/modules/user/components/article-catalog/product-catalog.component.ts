@@ -8,6 +8,9 @@ import { SubCategoryService } from '../../../../core/services/subcategory.servic
 import { CartService } from '../../../../core/services/cart.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '../../../../core/services/auth.service';
+import { ProductDetailComponent } from '../article-detail/product-detail.component';
 
 @Component({
   selector: 'app-product-catalog',
@@ -16,9 +19,10 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class ProductCatalogComponent implements OnInit {
   products: Product[] = [];
+  private allProducts: Product[] = [];
   categories: Category[] = [];
-  subcategories: SubCategory[] = [];
   public form!: FormGroup;
+  isAdmin = false;
 
   filter: ProductFilter = {
     page: 1,
@@ -28,24 +32,24 @@ export class ProductCatalogComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private categoryService: CategoryService,
-    private subCategoryService: SubCategoryService,
     private cartService: CartService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {
     this.initForm();
+    this.isAdmin = this.authService.isAdmin();
   }
 
   ngOnInit(): void {
     this.loadArticles();
     this.categoryService.getAll().subscribe(cats => this.categories = cats);
-    this.subCategoryService.getAll().subscribe(subs => this.subcategories = subs);
   }
 
   private initForm(): void {
     this.form = this.fb.group({
       searchTerm: [''],
       categoryId: [undefined],
-      subCategoryId: [undefined],
       minPrice: [null],
       maxPrice: [null]
     });
@@ -53,19 +57,52 @@ export class ProductCatalogComponent implements OnInit {
     this.form.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged()
-    ).subscribe(values => {
-      this.filter = { ...this.filter, ...values, page: 1 };
-      this.loadArticles();
+    ).subscribe(() => {
+      this.applyFilters();
     });
   }
 
   loadArticles(): void {
-    this.productService.getByFilter(this.filter).subscribe(result => {
-      this.products = result;
+    if (this.allProducts.length === 0) {
+      this.productService.getAll().subscribe(result => {
+        this.allProducts = result;
+        this.applyFilters();
+      });
+    } else {
+      this.applyFilters();
+    }
+  }
+
+  private applyFilters(): void {
+    const { searchTerm, categoryId, minPrice, maxPrice } = this.form.value;
+
+    const normCat = (categoryId !== null && categoryId !== undefined && categoryId !== '')
+      ? Number(categoryId) : null;
+    const normMin = (minPrice !== null && minPrice !== '') ? Number(minPrice) : null;
+    const normMax = (maxPrice !== null && maxPrice !== '') ? Number(maxPrice) : null;
+
+    this.products = this.allProducts.filter(p => {
+      const matchesSearch = !searchTerm ||
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.description && p.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+      const matchesCategory = normCat === null || Number(p.categoryId) === normCat;
+      const matchesMinPrice = normMin === null || p.price >= normMin;
+      const matchesMaxPrice = normMax === null || p.price <= normMax;
+
+      return matchesSearch && matchesCategory && matchesMinPrice && matchesMaxPrice;
     });
   }
 
   addToCart(product: Product): void {
     this.cartService.addProduct(product, 1);
+    alert(`${product.name} ajouté au panier !`);
+  }
+
+  viewProductDetails(product: Product): void {
+    this.dialog.open(ProductDetailComponent, {
+      width: '800px',
+      data: { id: product.id }
+    });
   }
 }

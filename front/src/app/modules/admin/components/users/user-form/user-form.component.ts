@@ -22,7 +22,8 @@ export class UserFormComponent implements OnInit {
     ) {
         this.isEdit = !!data;
         this.userForm = this.fb.group({
-            fullName: [data?.fullName || '', Validators.required],
+            firstName: [data?.firstName || '', Validators.required],
+            lastName: [data?.lastName || '', Validators.required],
             email: [data?.email || '', [Validators.required, Validators.email]],
             password: ['', this.isEdit ? [] : [Validators.required, Validators.minLength(6)]],
             role: [data?.role || 'User', Validators.required]
@@ -33,8 +34,11 @@ export class UserFormComponent implements OnInit {
 
     onSubmit(): void {
         if (this.userForm.valid) {
-            const userData = this.userForm.value;
+            const userData = { ...this.userForm.value };
             if (this.isEdit && this.data) {
+                if (!userData.password) {
+                    delete userData.password;
+                }
                 this.userService.update(this.data.id, userData).subscribe(() => {
                     this.dialogRef.close(true);
                 });

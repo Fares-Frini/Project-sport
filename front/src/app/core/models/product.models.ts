@@ -9,6 +9,7 @@ export interface Product {
     subCategoryId?: number;
     subCategoryName?: string;
     stockQuantity?: number;
+    imageUrl?: string;
 }
 
 export interface ProductFilter {

@@ -16,7 +16,8 @@
             </div>
 
             <div class="nav-actions d-flex align-items-center gap-3">
-                <a routerLink="/cart" class="cart-btn position-relative me-2 text-decoration-none">
+                <a *ngIf="!isAdmin(currentUser$ | async)" routerLink="/cart"
+                    class="cart-btn position-relative me-2 text-decoration-none">
                     <span class="cart-icon">🛒</span>
                     <span *ngIf="(cartCount$ | async) !== 0"
                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

@@ -36,6 +36,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatInputModule,
     MatChipsModule,
     MatProgressSpinnerModule
+  ],
+  exports: [
+    ProductDetailComponent
   ]
 })
 export class UserModule { }

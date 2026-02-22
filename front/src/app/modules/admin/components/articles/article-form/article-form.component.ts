@@ -51,14 +51,23 @@ export class ArticleFormComponent implements OnInit {
       description: [''],
       price: [0, [Validators.required, Validators.min(0)]],
       stock: [0, [Validators.required, Validators.min(0)]],
-      categoryId: [null, Validators.required]
+      categoryId: [null, Validators.required],
+      imageUrl: ['']
     });
   }
 
   private loadData(): void {
     this.categoryService.getAll().subscribe(cats => this.categories = cats);
     // Initially load all subcategories or filter based on selected category if needed
-    this.subCategoryService.getAll().subscribe(subs => this.subcategories = subs);
+    this.subCategoryService.getAll().subscribe(subs => {
+      this.subcategories = subs;
+      if (this.isEdit && this.productId) {
+        const customUrl = this.productService.getCustomImageUrl(this.productId);
+        if (customUrl) {
+          this.articleForm.patchValue({ imageUrl: customUrl });
+        }
+      }
+    });
   }
 
   onCategoryChange(categoryId: number): void {
@@ -67,13 +76,19 @@ export class ArticleFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.articleForm.valid) {
-      const productData = this.articleForm.value;
+      const { imageUrl, ...productData } = this.articleForm.value;
       if (this.isEdit && this.productId) {
         this.productService.update(this.productId, productData).subscribe(() => {
+          if (imageUrl) {
+            this.productService.saveCustomImageUrl(this.productId!, imageUrl);
+          }
           this.router.navigate(['/admin/articles']);
         });
       } else {
-        this.productService.create(productData).subscribe(() => {
+        this.productService.create(productData).subscribe(newProduct => {
+          if (imageUrl && newProduct.id) {
+            this.productService.saveCustomImageUrl(newProduct.id, imageUrl);
+          }
           this.router.navigate(['/admin/articles']);
         });
       }

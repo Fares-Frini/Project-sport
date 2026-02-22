@@ -4,6 +4,7 @@ import { Category } from '../../../../../core/models/category.model';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoryFormComponent } from '../category-form/category-form.component';
+import { CategoryDetailComponent } from '../category-detail/category-detail.component';
 
 @Component({
   selector: 'app-category-list',
@@ -12,7 +13,7 @@ import { CategoryFormComponent } from '../category-form/category-form.component'
 })
 export class CategoryListComponent implements OnInit {
   categories: Category[] = [];
-  displayedColumns: string[] = ['id', 'name', 'subCategoryCount', 'actions'];
+  displayedColumns: string[] = ['id', 'name', 'actions'];
   isLoading = false;
   isAdmin = false;
 
@@ -53,6 +54,13 @@ export class CategoryListComponent implements OnInit {
       if (result) {
         this.loadCategories();
       }
+    });
+  }
+
+  viewCategory(category: Category): void {
+    this.dialog.open(CategoryDetailComponent, {
+      width: '600px',
+      data: { id: category.id }
     });
   }
 }

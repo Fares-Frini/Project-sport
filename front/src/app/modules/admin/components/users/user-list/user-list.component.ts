@@ -3,6 +3,7 @@ import { User } from '../../../../../core/models/auth.models';
 import { UserService } from '../../../../../core/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '../user-form/user-form.component';
+import { UserDetailComponent } from '../user-detail/user-detail.component';
 
 @Component({
     selector: 'app-user-list',
@@ -47,5 +48,12 @@ export class UserListComponent implements OnInit {
                 this.loadUsers();
             });
         }
+    }
+
+    viewUser(user: User): void {
+        this.dialog.open(UserDetailComponent, {
+            width: '600px',
+            data: { user }
+        });
     }
 }

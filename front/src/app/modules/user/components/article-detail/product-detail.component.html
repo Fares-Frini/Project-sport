@@ -1,13 +1,19 @@
-<div class="container py-5" *ngIf="product">
-    <div class="row">
-        <div class="col-md-6 text-center">
-            <div class="product-placeholder bg-dark rounded shadow-sm d-flex align-items-center justify-content-center"
-                style="height: 500px;">
-                <span style="font-size: 8rem;">📦</span>
+<div [ngClass]="{'container py-5': !isModal}" *ngIf="product">
+    <h2 mat-dialog-title *ngIf="isModal" class="brand-font d-flex justify-content-between align-items-center">
+        Détails du Produit
+        <button mat-icon-button (click)="dialogRef.close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h2>
+    <div [ngClass]="{'row': !isModal, 'mat-dialog-content': isModal}">
+        <div [ngClass]="{'col-md-6 text-center': !isModal, 'text-center mb-3': isModal}">
+            <div class="product-image-container bg-light rounded shadow-sm d-flex align-items-center justify-content-center overflow-hidden"
+                [style.height]="isModal ? '300px' : '500px'">
+                <img [src]="product.imageUrl" [alt]="product.name" class="w-100 h-100" style="object-fit: cover;">
             </div>
         </div>
-        <div class="col-md-6">
-            <nav aria-label="breadcrumb">
+        <div [ngClass]="{'col-md-6': !isModal}">
+            <nav aria-label="breadcrumb" *ngIf="!isModal">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a routerLink="/catalog">Catalogue</a></li>
                     <li class="breadcrumb-item active">{{product.name}}</li>
@@ -25,25 +31,12 @@
 
             <p class="lead mb-4">{{ product.description || 'Produit de haute performance SportStore.' }}</p>
 
-            <div class="mb-4">
-                <p class="fw-bold mb-2">Quantité</p>
-                <div class="d-flex align-items-center gap-2">
-                    <button mat-icon-button (click)="decrement()" [disabled]="quantity <= 1">
-                        <mat-icon>remove</mat-icon>
-                    </button>
-                    <span class="fs-4 px-3">{{quantity}}</span>
-                    <button mat-icon-button (click)="increment()">
-                        <mat-icon>add</mat-icon>
-                    </button>
-                </div>
-            </div>
-
             <div class="d-grid gap-2">
-                <button mat-raised-button color="primary" size="large" (click)="addToCart()">
-                    <mat-icon>shopping_cart</mat-icon> Ajouter au Panier
-                </button>
-                <button mat-button routerLink="/catalog">
+                <button *ngIf="!isModal" mat-button routerLink="/catalog">
                     Retour au catalogue
+                </button>
+                <button *ngIf="isModal" mat-button (click)="dialogRef.close()">
+                    Fermer
                 </button>
             </div>
 

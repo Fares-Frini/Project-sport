@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from '../../../../../core/services/category.service';
 import { SubCategoryService } from '../../../../../core/services/subcategory.service';
 import { Category } from '../../../../../core/models/category.model';
 import { SubCategory } from '../../../../../core/models/subcategory.model';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-category-detail',
@@ -14,15 +15,20 @@ export class CategoryDetailComponent implements OnInit {
   category: Category | null = null;
   subCategories: SubCategory[] = [];
   isLoading = false;
+  isModal = false;
 
   constructor(
     private route: ActivatedRoute,
     private categoryService: CategoryService,
-    private subCategoryService: SubCategoryService
-  ) { }
+    private subCategoryService: SubCategoryService,
+    @Optional() public dialogRef: MatDialogRef<CategoryDetailComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { id: number }
+  ) {
+    this.isModal = !!dialogRef;
+  }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this.data?.id || this.route.snapshot.paramMap.get('id');
     if (id) {
       this.loadCategory(+id);
       this.loadSubCategories(+id);

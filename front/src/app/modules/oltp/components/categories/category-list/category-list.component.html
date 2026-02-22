@@ -2,7 +2,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="fw-bold mb-0 brand-font">Gestion des Catégories</h1>
-            <p class="text-muted small">Organisation des produits AdventureWorks 2019</p>
         </div>
         <button *ngIf="isAdmin" (click)="openCategoryForm()"
             class="btn btn-premium btn-primary d-flex align-items-center gap-2">
@@ -24,19 +23,16 @@
                 <td mat-cell *matCellDef="let category" class="fw-bold"> {{category.name}} </td>
             </ng-container>
 
-            <!-- Count Column -->
-            <ng-container matColumnDef="subCategoryCount">
-                <th mat-header-cell *matHeaderCellDef class="brand-font"> Sous-Catégories </th>
-                <td mat-cell *matCellDef="let category">
-                    <span class="badge bg-primary-soft text-primary small">{{category.subCategoryCount}}</span>
-                </td>
-            </ng-container>
+
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef class="brand-font"> Actions </th>
                 <td mat-cell *matCellDef="let category">
                     <div *ngIf="isAdmin">
+                        <button mat-icon-button color="primary" (click)="viewCategory(category)" title="Détails">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
                         <button mat-icon-button color="accent" (click)="openCategoryForm(category)">
                             <mat-icon>edit</mat-icon>
                         </button>

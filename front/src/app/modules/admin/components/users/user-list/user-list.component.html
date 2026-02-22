@@ -14,7 +14,8 @@
             <table mat-table [dataSource]="users" class="w-100">
                 <ng-container matColumnDef="fullName">
                     <th mat-header-cell *matHeaderCellDef> Nom Complet </th>
-                    <td mat-cell *matCellDef="let user"> {{ user.fullName }} </td>
+                    <td mat-cell *matCellDef="let user"> {{ user.firstName || '' }} {{ user.lastName || '' }} {{
+                        !user.firstName && !user.lastName ? user.fullName : '' }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="email">
@@ -34,6 +35,9 @@
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef class="text-end px-4"> Actions </th>
                     <td mat-cell *matCellDef="let user" class="text-end px-4">
+                        <button mat-icon-button color="primary" (click)="viewUser(user)" title="Détails">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
                         <button mat-icon-button color="primary" (click)="openUserForm(user)">
                             <mat-icon>edit</mat-icon>
                         </button>

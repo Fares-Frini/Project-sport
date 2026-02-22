@@ -16,6 +16,8 @@ export class DashboardComponent implements OnInit {
   salesByCityData: any;
   salesTrendData: any;
   salesByCountryData: any;
+  distributionData: any;
+  personsData: any;
 
   isLoading = false;
 
@@ -33,7 +35,9 @@ export class DashboardComponent implements OnInit {
       byCity: this.analyticsService.getSalesByCity(),
       trend: this.analyticsService.getSalesTrend(),
       byCountry: this.analyticsService.getSalesByCountry(),
-      topProducts: this.analyticsService.getTopProducts()
+      topProducts: this.analyticsService.getTopProducts(),
+      distribution: this.analyticsService.getPersonsByType(),
+      persons: this.analyticsService.getPersons()
     }).subscribe({
       next: (data) => {
         this.kpis = data.kpis;
@@ -88,10 +92,32 @@ export class DashboardComponent implements OnInit {
 
         // Chart 4: Country (Doughnut)
         this.salesByCountryData = {
-          labels: data.byCountry.map(c => c.country),
+          labels: data.byCountry?.map(c => c.country) || [],
           datasets: [{
-            data: data.byCountry.map(c => c.totalRevenue),
+            data: data.byCountry?.map(c => c.totalRevenue) || [],
             backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
+          }]
+        };
+
+        // Chart 5: Distribution (Bar/Histogram instead of Pie)
+        this.distributionData = {
+          labels: data.distribution?.map((d: any) => d.label) || [],
+          datasets: [{
+            label: 'Nombre par Type',
+            data: data.distribution?.map((d: any) => d.value) || [],
+            backgroundColor: '#4e73df',
+            borderRadius: 5
+          }]
+        };
+
+        // Chart 6: Persons (Histogram)
+        this.personsData = {
+          labels: data.persons?.map((p: any) => `${p.firstName} ${p.lastName}`) || [],
+          datasets: [{
+            label: 'Échantillon Personnes DWH',
+            data: data.persons?.map(() => Math.floor(Math.random() * 100) + 10) || [], // Random weights as placeholder for histogram
+            backgroundColor: '#1cc88a',
+            borderRadius: 5
           }]
         };
 

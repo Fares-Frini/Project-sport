@@ -1,7 +1,6 @@
 <div class="container-fluid py-5" *ngIf="kpis$ | async as kpi">
     <div class="header-section mb-5">
         <h1 class="display-5 fw-bold text-gradient brand-font">SportStore - Administration</h1>
-        <p class="text-muted">Exploitation des données <strong>AdventureWorks 2019</strong> en temps réel.</p>
     </div>
 
     <!-- KPI Cards -->
@@ -71,7 +70,7 @@
                     <h5 class="fw-bold mb-0 brand-font">Répartition par Catégorie</h5>
                 </div>
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
-                    <canvas baseChart [data]="pieChartData" [type]="pieChartType">
+                    <canvas baseChart [data]="pieChartData" [type]="'pie'">
                     </canvas>
                 </div>
             </div>
@@ -79,18 +78,75 @@
     </div>
 
     <!-- DWH Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <h5 class="fw-bold text-muted mb-2 brand-font">
+                <span class="badge bg-secondary me-2">DWH</span>
+                Analyses depuis Exam_DWH (Fact_Sales &amp; Dimensions)
+            </h5>
+        </div>
+    </div>
+
+    <!-- DWH Row 1: PersonType + Top Products -->
     <div class="row g-4 mb-5">
-        <div class="col-lg-12">
+        <div class="col-lg-5">
             <div class="card premium-card glass-effect border-0 h-100">
                 <div class="card-header bg-transparent border-0 p-4">
-                    <h5 class="fw-bold mb-0 brand-font">Répartition des Utilisateurs (DWH)</h5>
+                    <h5 class="fw-bold mb-0 brand-font">Répartition des Personnes (DWH)</h5>
+                    <small class="text-muted">Dim_Person — par type</small>
                 </div>
-                <div class="card-body p-4 d-flex align-items-center justify-content-center" style="max-height: 400px;">
-                    <canvas baseChart [data]="personTypeChartData" [type]="'pie'">
-                    </canvas>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                    <canvas baseChart [data]="personTypeChartData" [type]="'bar'"></canvas>
                 </div>
-                <div class="card-footer bg-transparent border-0 p-3 text-center">
-                    <small class="text-muted">Données extraites de AdventureWorks DimPerson</small>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">🏆 Top 10 Produits par Revenu (DWH)</h5>
+                    <small class="text-muted">Fact_Sales JOIN Dim_Product</small>
+                </div>
+                <div class="card-body p-4">
+                    <canvas baseChart [data]="topProductsChartData" [options]="topProductsOptions"
+                        [type]="'bar'"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DWH Row 2: Territory + SalesPerson + CreditCard -->
+    <div class="row g-4 mb-5">
+        <div class="col-lg-5">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">🌍 Ventes par Territoire (DWH)</h5>
+                    <small class="text-muted">Fact_Sales JOIN Dim_SalesTerritory</small>
+                </div>
+                <div class="card-body p-4">
+                    <canvas baseChart [data]="territoryChartData" [type]="'bar'"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">🥇 Top 10 Vendeurs (DWH)</h5>
+                    <small class="text-muted">Fact_Sales JOIN Dim_SalesPerson</small>
+                </div>
+                <div class="card-body p-4">
+                    <canvas baseChart [data]="salesPersonChartData" [options]="salesPersonOptions"
+                        [type]="'bar'"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card premium-card glass-effect border-0 h-100">
+                <div class="card-header bg-transparent border-0 p-4">
+                    <h5 class="fw-bold mb-0 brand-font">💳 Types de Cartes (DWH)</h5>
+                    <small class="text-muted">Dim_CreditCard</small>
+                </div>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                    <canvas baseChart [data]="creditCardChartData" [type]="'doughnut'"></canvas>
                 </div>
             </div>
         </div>

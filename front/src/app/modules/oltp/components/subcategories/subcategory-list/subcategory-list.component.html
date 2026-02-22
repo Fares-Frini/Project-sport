@@ -2,7 +2,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
             <h1 class="fw-bold mb-0 brand-font">Gestion des Sous-Catégories</h1>
-            <p class="text-muted small">Détail des familles de produits AdventureWorks</p>
             <div class="mt-3" style="min-width: 250px;">
                 <mat-form-field appearance="outline" class="w-100 dense-field">
                     <mat-label>Filtrer par catégorie</mat-label>
@@ -50,6 +49,9 @@
                 <th mat-header-cell *matHeaderCellDef class="brand-font"> Actions </th>
                 <td mat-cell *matCellDef="let sub">
                     <div *ngIf="isAdmin">
+                        <button mat-icon-button color="primary" (click)="viewSubCategory(sub)" title="Détails">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
                         <button mat-icon-button color="accent" (click)="openSubCategoryForm(sub)">
                             <mat-icon>edit</mat-icon>
                         </button>

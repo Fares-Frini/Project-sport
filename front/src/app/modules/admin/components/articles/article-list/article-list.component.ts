@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProductDetailComponent } from '../../../../user/components/article-detail/product-detail.component';
 
 @Component({
   selector: 'app-article-list',
@@ -15,7 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
     RouterModule,
     MatTableModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule
   ],
   templateUrl: './article-list.component.html',
   styleUrls: ['./article-list.component.scss']
@@ -24,7 +27,11 @@ export class ArticleListComponent implements OnInit {
   products: Product[] = [];
   displayedColumns: string[] = ['name', 'listPrice', 'subCategoryName', 'actions'];
 
-  constructor(private productService: ProductService, private router: Router) { }
+  constructor(
+    private productService: ProductService,
+    private router: Router,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     console.log('ArticleListComponent: Initialisation...');
@@ -36,6 +43,13 @@ export class ArticleListComponent implements OnInit {
       error: (err) => {
         console.error('ArticleListComponent: Erreur lors de la récupération des produits:', err);
       }
+    });
+  }
+
+  viewProduct(id: number): void {
+    this.dialog.open(ProductDetailComponent, {
+      width: '800px',
+      data: { id }
     });
   }
 

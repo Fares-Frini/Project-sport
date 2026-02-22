@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../../../core/models/product.models';
 import { ProductService } from '../../../../core/services/product.service';
 import { CartService } from '../../../../core/services/cart.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-detail',
@@ -12,28 +13,23 @@ import { CartService } from '../../../../core/services/cart.service';
 })
 export class ProductDetailComponent implements OnInit {
   product?: Product;
-  quantity = 1;
+  isModal = false;
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private cartService: CartService
-  ) { }
+    @Optional() public dialogRef: MatDialogRef<ProductDetailComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { id: number }
+  ) {
+    this.isModal = !!dialogRef;
+  }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    this.productService.getById(id).subscribe(product => {
-      this.product = product;
-    });
-  }
-
-  addToCart(): void {
-    if (this.product) {
-      this.cartService.addProduct(this.product, this.quantity);
-      alert('Produit ajouté au panier !');
+    const id = this.data?.id || this.route.snapshot.params['id'];
+    if (id) {
+      this.productService.getById(id).subscribe(product => {
+        this.product = product;
+      });
     }
   }
-
-  increment(): void { this.quantity++; }
-  decrement(): void { if (this.quantity > 1) this.quantity--; }
 }

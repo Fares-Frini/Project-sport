@@ -1,95 +1,138 @@
 <div class="container py-4">
     <h1 class="mb-4">Mon Panier</h1>
 
-    <div *ngIf="(cart$ | async) as cart">
-        <!-- Empty Cart Message -->
-        <div *ngIf="cart.items.length === 0" class="alert alert-info glass-effect border-0">
-            <h4 class="brand-font">Votre panier est vide</h4>
-            <p>Découvrez nos produits AdventureWorks et atteignez vos sommets !</p>
-            <a routerLink="/catalog" class="btn btn-premium btn-primary">Voir le catalogue</a>
+    <!-- ✅ Order Confirmed Screen -->
+    <div *ngIf="orderConfirmed" class="text-center py-5">
+        <div class="card premium-card glass-effect border-0 mx-auto" style="max-width: 560px;">
+            <div class="card-body p-5">
+                <div class="mb-4" style="font-size: 5rem; animation: pulse 1s;">✅</div>
+                <h2 class="brand-font text-success mb-2">Commande confirmée !</h2>
+                <p class="text-muted mb-4">Merci pour votre confiance. Votre commande a été enregistrée avec succès.</p>
+                <div class="bg-dark rounded p-3 mb-4 text-start">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted small">Référence :</span>
+                        <strong class="text-primary">{{ orderRef }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted small">Date :</span>
+                        <span class="small">{{ orderDate }}</span>
+                    </div>
+                </div>
+                <p class="text-muted small mb-4">
+                    📧 Un email de confirmation vous sera envoyé prochainement.
+                </p>
+                <a routerLink="/catalog" class="btn btn-premium btn-primary w-100">
+                    🛍️ Continuer mes achats
+                </a>
+            </div>
         </div>
+    </div>
 
-        <!-- Cart Items -->
-        <div *ngIf="cart.items.length > 0">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card premium-card glass-effect border-0 mb-4">
-                        <div class="card-header bg-transparent border-0 p-4">
-                            <h5 class="mb-0 brand-font">Articles ({{ cart.items.length }})</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="cart-item mb-4 pb-4 border-bottom border-secondary opacity-75"
-                                *ngFor="let item of cart.items">
-                                <div class="row align-items-center">
-                                    <div class="col-md-2">
-                                        <div class="product-placeholder bg-dark rounded d-flex align-items-center justify-content-center"
-                                            style="height: 80px;">
-                                            <span style="font-size: 2rem;">📦</span>
+    <!-- 🛒 Cart Content -->
+    <div *ngIf="!orderConfirmed">
+        <div *ngIf="(cart$ | async) as cart">
+            <!-- Empty Cart Message -->
+            <div *ngIf="cart.items.length === 0" class="alert alert-info glass-effect border-0">
+                <h4 class="brand-font">Votre panier est vide</h4>
+                <p>Découvrez nos produits AdventureWorks et atteignez vos sommets !</p>
+                <a routerLink="/catalog" class="btn btn-premium btn-primary">Voir le catalogue</a>
+            </div>
+
+            <!-- Cart Items -->
+            <div *ngIf="cart.items.length > 0">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card premium-card glass-effect border-0 mb-4">
+                            <div class="card-header bg-transparent border-0 p-4">
+                                <h5 class="mb-0 brand-font">Articles ({{ cart.items.length }})</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="cart-item mb-4 pb-4 border-bottom border-secondary opacity-75"
+                                    *ngFor="let item of cart.items">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2">
+                                            <div class="rounded overflow-hidden" style="height: 80px;">
+                                                <img *ngIf="item.product.imageUrl" [src]="item.product.imageUrl"
+                                                    [alt]="item.product.name"
+                                                    style="width: 100%; height: 80px; object-fit: cover;">
+                                                <div *ngIf="!item.product.imageUrl"
+                                                    class="bg-dark d-flex align-items-center justify-content-center h-100">
+                                                    <span style="font-size: 2rem;">📦</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <h6 class="fw-bold mb-1">{{ item.product.name }}</h6>
-                                        <p class="text-muted small mb-0">{{ item.product.categoryName || 'SportStore' }}
-                                        </p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <p class="mb-0 fw-bold">{{ item.unitPrice | currency:'USD' }}</p>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="input-group input-group-sm">
-                                            <button class="btn btn-outline-primary" type="button"
-                                                (click)="updateQuantity(item.productId, item.quantity - 1)">-</button>
-                                            <input type="text"
-                                                class="form-control bg-transparent text-center text-main border-primary"
-                                                [value]="item.quantity" readonly>
-                                            <button class="btn btn-outline-primary" type="button"
-                                                (click)="updateQuantity(item.productId, item.quantity + 1)">+</button>
+                                        <div class="col-md-4">
+                                            <h6 class="fw-bold mb-1">{{ item.product.name }}</h6>
+                                            <p class="text-muted small mb-0">{{ item.product.categoryName ||
+                                                'SportStore' }}</p>
                                         </div>
-                                    </div>
-                                    <div class="col-md-2 text-end">
-                                        <p class="fw-bold mb-2 text-gradient fs-5">{{ item.totalPrice | currency:'USD'
-                                            }}</p>
-                                        <button class="btn btn-sm btn-outline-danger border-0"
-                                            (click)="removeProduct(item.productId)">
-                                            <mat-icon
-                                                style="font-size: 18px; height: 18px; width: 18px;">delete_outline</mat-icon>
-                                        </button>
+                                        <div class="col-md-2">
+                                            <p class="mb-0 fw-bold">{{ item.unitPrice | currency:'USD' }}</p>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="input-group input-group-sm">
+                                                <button class="btn btn-outline-primary" type="button"
+                                                    (click)="updateQuantity(item.productId, item.quantity - 1)">-</button>
+                                                <input type="text"
+                                                    class="form-control bg-transparent text-center text-main border-primary"
+                                                    [value]="item.quantity" readonly>
+                                                <button class="btn btn-outline-primary" type="button"
+                                                    (click)="updateQuantity(item.productId, item.quantity + 1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 text-end">
+                                            <p class="fw-bold mb-2 text-gradient fs-5">{{ item.totalPrice |
+                                                currency:'USD' }}</p>
+                                            <button class="btn btn-sm btn-outline-danger border-0"
+                                                (click)="removeProduct(item.productId)">
+                                                <mat-icon
+                                                    style="font-size: 18px; height: 18px; width: 18px;">delete_outline</mat-icon>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-outline-danger" (click)="clearCart()">Vider le panier</button>
+                            <div class="card-footer">
+                                <button class="btn btn-outline-danger" (click)="clearCart()">Vider le panier</button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Cart Summary -->
-                <div class="col-lg-4">
-                    <div class="card premium-card glass-effect border-0">
-                        <div class="card-header bg-transparent border-0 p-4 pb-0">
-                            <h5 class="mb-0 brand-font">Résumé</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="d-flex justify-content-between mb-3">
-                                <span class="text-muted">Sous-total:</span>
-                                <span class="fw-bold">{{ cart.subTotal | currency:'USD' }}</span>
+                    <!-- Cart Summary -->
+                    <div class="col-lg-4">
+                        <div class="card premium-card glass-effect border-0">
+                            <div class="card-header bg-transparent border-0 p-4 pb-0">
+                                <h5 class="mb-0 brand-font">Résumé</h5>
                             </div>
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span class="text-muted">Sous-total:</span>
+                                    <span class="fw-bold">{{ cart.subTotal | currency:'USD' }}</span>
+                                </div>
 
-                            <div *ngIf="cart.discountTotal > 0"
-                                class="d-flex justify-content-between mb-3 text-success">
-                                <span>Remise:</span>
-                                <span>-{{ cart.discountTotal | currency:'USD' }}</span>
+                                <div *ngIf="cart.discountTotal > 0"
+                                    class="d-flex justify-content-between mb-3 text-success">
+                                    <span>Remise:</span>
+                                    <span>-{{ cart.discountTotal | currency:'USD' }}</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2 text-muted small">
+                                    <span>🚚 Livraison:</span>
+                                    <span class="text-success">Gratuite</span>
+                                </div>
+
+                                <hr class="border-secondary opacity-50 my-4">
+                                <div class="d-flex justify-content-between mb-4">
+                                    <strong class="fs-5">Total:</strong>
+                                    <strong class="text-gradient fs-3">{{ cart.total | currency:'USD' }}</strong>
+                                </div>
+
+                                <button class="btn btn-premium btn-primary w-100 btn-lg mb-3"
+                                    (click)="confirmOrder(cart.total)">
+                                    🛒 Commander
+                                </button>
+                                <a routerLink="/catalog" class="btn btn-outline-primary w-100">Continuer mes achats</a>
                             </div>
-
-                            <hr class="border-secondary opacity-50 my-4">
-                            <div class="d-flex justify-content-between mb-4">
-                                <strong class="fs-5">Total:</strong>
-                                <strong class="text-gradient fs-3">{{ cart.total | currency:'USD' }}</strong>
-                            </div>
-
-                            <button class="btn btn-premium btn-primary w-100 btn-lg mb-3">Commander</button>
-                            <a routerLink="/catalog" class="btn btn-outline-primary w-100">Continuer mes achats</a>
                         </div>
                     </div>
                 </div>

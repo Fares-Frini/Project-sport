@@ -11,6 +11,9 @@ import { CartService } from '../../../../core/services/cart.service';
 })
 export class ShoppingCartComponent implements OnInit {
   cart$!: Observable<Cart>;
+  orderConfirmed = false;
+  orderRef = '';
+  orderDate = '';
 
   constructor(private cartService: CartService) { }
 
@@ -32,5 +35,18 @@ export class ShoppingCartComponent implements OnInit {
     if (confirm('Êtes-vous sûr de vouloir vider le panier ?')) {
       this.cartService.clearCart();
     }
+  }
+
+  confirmOrder(total: number): void {
+    // Generate static order reference
+    const rand = Math.floor(10000 + Math.random() * 90000);
+    this.orderRef = `CMD-${new Date().getFullYear()}-${rand}`;
+    this.orderDate = new Date().toLocaleDateString('fr-FR', {
+      day: '2-digit', month: 'long', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+    this.orderConfirmed = true;
+    // Clear the cart
+    this.cartService.clearCart();
   }
 }

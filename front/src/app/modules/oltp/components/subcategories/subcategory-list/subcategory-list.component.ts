@@ -6,6 +6,7 @@ import { Category } from '../../../../../core/models/category.model';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SubcategoryFormComponent } from '../subcategory-form/subcategory-form.component';
+import { SubcategoryDetailComponent } from '../subcategory-detail/subcategory-detail.component';
 
 @Component({
   selector: 'app-subcategory-list',
@@ -83,6 +84,13 @@ export class SubcategoryListComponent implements OnInit {
       if (result) {
         this.loadData();
       }
+    });
+  }
+
+  viewSubCategory(sub: SubCategory): void {
+    this.dialog.open(SubcategoryDetailComponent, {
+      width: '600px',
+      data: { id: sub.id }
     });
   }
 }

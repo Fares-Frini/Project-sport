@@ -2,7 +2,6 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h1 class="fw-bold mb-0 brand-font">Gestion des Produits</h1>
-            <p class="text-muted small">Inventaire AdventureWorks (Standes / Bikes / etc.)</p>
         </div>
         <button mat-raised-button color="primary" routerLink="/admin/articles/create"
             class="btn btn-premium btn-primary d-flex align-items-center gap-2">
@@ -40,6 +39,9 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef class="brand-font"> Actions </th>
                 <td mat-cell *matCellDef="let product">
+                    <button mat-icon-button color="primary" (click)="viewProduct(product.id)" title="Détails">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
                     <button mat-icon-button color="accent" (click)="editArticle(product.id)">
                         <mat-icon>edit</mat-icon>
                     </button>

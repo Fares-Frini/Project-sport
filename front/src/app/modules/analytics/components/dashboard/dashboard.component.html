@@ -58,7 +58,34 @@
             </div>
         </div>
     </div>
+
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Répartition par Type (Histogramme)</h6>
+            </div>
+            <div class="card-body">
+                <app-sales-charts [type]="'bar'" [data]="distributionData"
+                    [options]="{ maintainAspectRatio: false }"></app-sales-charts>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="row mb-4" *ngIf="!isLoading">
+    <div class="col-12 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Aperçu Personnes DWH (Histogramme)</h6>
+            </div>
+            <div class="card-body">
+                <app-sales-charts [type]="'bar'" [data]="personsData"
+                    [options]="{ maintainAspectRatio: false, indexAxis: 'y' }"></app-sales-charts>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <app-top-products-table [products]="topProducts"></app-top-products-table>
 

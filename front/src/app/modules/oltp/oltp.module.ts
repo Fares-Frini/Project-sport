@@ -47,6 +47,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatToolbarModule,
     MatSelectModule,
     MatProgressSpinnerModule
+  ],
+  exports: [
+    CategoryListComponent,
+    CategoryDetailComponent,
+    SubcategoryListComponent,
+    SubcategoryDetailComponent
   ]
 })
 export class OltpModule { }

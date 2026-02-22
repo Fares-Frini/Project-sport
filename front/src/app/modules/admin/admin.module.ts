@@ -7,6 +7,7 @@ import { ArticleListComponent } from './components/articles/article-list/article
 import { ArticleFormComponent } from './components/articles/article-form/article-form.component';
 import { UserListComponent } from './components/users/user-list/user-list.component';
 import { UserFormComponent } from './components/users/user-form/user-form.component';
+import { UserDetailComponent } from './components/users/user-detail/user-detail.component';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
@@ -28,7 +29,8 @@ import { NgChartsModule } from 'ng2-charts';
     AdminDashboardComponent,
     ArticleFormComponent,
     UserListComponent,
-    UserFormComponent
+    UserFormComponent,
+    UserDetailComponent
   ],
   imports: [
     CommonModule,
