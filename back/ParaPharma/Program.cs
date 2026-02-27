@@ -30,10 +30,10 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // DbContexts
 builder.Services.AddDbContext<OltpDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("OltpConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("OltpConnection")));
 
 builder.Services.AddDbContext<ExamDwhContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ExamDWHConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("ExamDWHConnection")));
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
