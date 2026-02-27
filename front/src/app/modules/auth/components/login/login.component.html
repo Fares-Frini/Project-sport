@@ -10,7 +10,8 @@
             <div *ngIf="error" class="alert alert-danger border-0 rounded-3 small mb-4">
                 {{error}}
             </div>
-
+            <!-- Formulaire de connexion -->
+            <!-- ngSubmit : déclenche la méthode onSubmit() lorsque le formulaire est soumis -->
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                 <div class="form-floating mb-3">
                     <input class="form-control bg-transparent" id="inputEmail" type="email" formControlName="email"

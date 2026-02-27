@@ -1,0 +1,188 @@
+<div class="p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Tableau de Bord DWH (Exam_DWH)</h1>
+        <div class="badge badge-info p-2">AdventureWorks Data Warehouse</div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Chargement...</span>
+        </div>
+        <p class="mt-2 text-muted">Récupération des données depuis le Data Warehouse...</p>
+    </div>
+
+    <div *ngIf="!isLoading">
+        <!-- KPI Cards Row -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Chiffre
+                                    d'Affaires (DWH)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ kpis?.totalRevenue |
+                                    currency:'USD' }}</div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total
+                                    Commandes (DWH)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ kpis?.totalOrders |
+                                    number }}</div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-shopping-cart fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Panier Moyen
+                                    (DWH)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ kpis?.averageBasket |
+                                    currency:'USD' }}</div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-shopping-bag fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Nbr
+                                    Clients (DWH)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ kpis?.totalCustomers |
+                                    number }}</div>
+                            </div>
+                            <div class="col-auto"><i class="fas fa-users fa-2x text-gray-300"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- CA Mensuel Line Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Évolution Mensuelle du CA (DWH)</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area" style="height: 300px;">
+                            <canvas baseChart [data]="salesTrendData" [options]="{ maintainAspectRatio: false }"
+                                [type]="'line'">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segmentation Client Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Segmentation Clients (DWH)</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-pie pt-4" style="height: 300px;">
+                            <canvas baseChart [data]="segmentationData" [type]="'pie'"
+                                [options]="{ maintainAspectRatio: false }">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- CA par Catégorie Bar Chart -->
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">CA par Catégorie de Produit (DWH)</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-bar" style="height: 300px;">
+                            <canvas baseChart [data]="salesByCategoryData" [type]="'bar'"
+                                [options]="{ maintainAspectRatio: false }">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Vendeurs Bar Chart -->
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Performance Vendeurs (CA vs Quota - DWH)
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-bar" style="height: 300px;">
+                            <canvas baseChart [data]="salesPersonData" [type]="'bar'"
+                                [options]="{ indexAxis: 'y', maintainAspectRatio: false }">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top 20 Produits Table -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Top 20 Produits par Performance (DWH)</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" width="100%" cellspacing="0">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>Produit</th>
+                                <th>Quantité Vendue</th>
+                                <th>CA Total</th>
+                                <th>Remise Moyenne (%)</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let p of topProducts">
+                                <td>{{ p.productName }}</td>
+                                <td>{{ p.totalQty | number }}</td>
+                                <td class="font-weight-bold">{{ p.revenue | currency:'USD' }}</td>
+                                <td>{{ p.averageDiscount * 100 | number:'1.2-2' }}%</td>
+                                <td>
+                                    <span
+                                        [class]="p.averageDiscount > 0.05 ? 'badge badge-warning' : 'badge badge-success'">
+                                        {{ p.averageDiscount > 0.05 ? 'Remise Forte' : 'Standard' }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

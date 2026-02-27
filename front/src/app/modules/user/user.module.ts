@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ProductCatalogComponent } from './components/article-catalog/product-catalog.component';
 import { ProductDetailComponent } from './components/article-detail/product-detail.component';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
+import { OrderHistoryComponent } from './components/order-history/order-history.component';
 import { SharedModule } from '../../shared/shared.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +23,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     HomeComponent,
     ProductCatalogComponent,
     ProductDetailComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
+    OrderHistoryComponent
   ],
   imports: [
     CommonModule,

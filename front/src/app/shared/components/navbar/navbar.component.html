@@ -10,6 +10,8 @@
                 <a routerLink="/home" routerLinkActive="active-premium" class="nav-link-premium">Accueil</a>
                 <a routerLink="/catalog" routerLinkActive="active-premium" class="nav-link-premium">Catalogue</a>
                 <ng-container *ngIf="currentUser$ | async as user">
+                    <a routerLink="/my-orders" *ngIf="!isAdmin(user)" routerLinkActive="active-premium"
+                        class="nav-link-premium">Mes Commandes</a>
                     <a routerLink="/admin/dashboard" *ngIf="isAdmin(user)"
                         class="nav-link-premium text-accent fw-bold">Admin</a>
                 </ng-container>

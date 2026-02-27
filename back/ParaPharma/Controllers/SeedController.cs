@@ -22,19 +22,38 @@ namespace ParaPharma.API.Controllers
         {
             if (_context.Customers.Any())
             {
+                // On permet quand même de continuer si c'est pour l'exercice, 
+                // mais ici on va juste retourner s'ils existent déjà.
                 return Ok(new { message = "Des customers existent déjà", count = _context.Customers.Count() });
             }
 
-            var customers = new List<Customer>
+            var now = DateTime.Now;
+            var customers = new List<Customer>();
+            
+            // On crée un historique sur 6 mois
+            for (int i = 0; i < 6; i++)
             {
-                new Customer { FirstName = "Mohamed", LastName = "Alami", Email = "mohamed.alami@email.com", Phone = "0612345678" },
-                new Customer { FirstName = "Fatima", LastName = "Zahra", Email = "fatima.zahra@email.com", Phone = "0623456789" }
-            };
+                var monthDate = now.AddMonths(-i);
+                customers.Add(new Customer { 
+                    FirstName = $"Client_{i}_A", 
+                    LastName = "Test", 
+                    Email = $"client{i}a@test.com", 
+                    CreatedAt = monthDate,
+                    Phone = $"060000000{i}"
+                });
+                customers.Add(new Customer { 
+                    FirstName = $"Client_{i}_B", 
+                    LastName = "Test", 
+                    Email = $"client{i}b@test.com", 
+                    CreatedAt = monthDate.AddDays(-15),
+                    Phone = $"061111111{i}"
+                });
+            }
 
             await _context.Customers.AddRangeAsync(customers);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Customers créés avec succès", count = customers.Count });
+            return Ok(new { message = "12 customers créés avec un historique de 6 mois", count = customers.Count });
         }
 
         [HttpPost("seed-products")]
@@ -141,6 +160,50 @@ namespace ParaPharma.API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Utilisateurs de test créés avec succès", count = users.Count });
+        }
+
+        [HttpPost("seed-orders")]
+        public async Task<IActionResult> SeedOrders()
+        {
+            if (_context.Orders.Any())
+            {
+                return Ok(new { message = "Des commandes existent déjà" });
+            }
+
+            var user = await _context.AppUsers.FirstOrDefaultAsync();
+            var products = await _context.Products.Take(2).ToListAsync();
+
+            if (user == null || products.Count < 2)
+            {
+                return BadRequest(new { message = "Veuillez d'abord seeder les utilisateurs et les produits." });
+            }
+
+            var orders = new List<Order>();
+            var now = DateTime.Now;
+
+            for (int i = 0; i < 12; i++)
+            {
+                var orderDate = now.AddMonths(-i);
+                var order = new Order
+                {
+                    AppUserId = user.Id,
+                    OrderDate = orderDate,
+                    Status = i % 3 == 0 ? "Expédiée" : "En cours",
+                    TotalAmount = products.Sum(p => p.Price) * (i + 1),
+                    OrderDetails = products.Select(p => new OrderDetail
+                    {
+                        ProductId = p.Id,
+                        Quantity = i + 1,
+                        UnitPrice = p.Price
+                    }).ToList()
+                };
+                orders.Add(order);
+            }
+
+            await _context.Orders.AddRangeAsync(orders);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "12 mois de commandes créés avec succès", count = orders.Count });
         }
     }
 }

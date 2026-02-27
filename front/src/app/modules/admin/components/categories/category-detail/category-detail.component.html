@@ -1,0 +1,53 @@
+<h2 mat-dialog-title *ngIf="isModal" class="brand-font d-flex justify-content-between align-items-center">
+    Détails de la Catégorie
+    <button mat-icon-button (click)="dialogRef.close()">
+        <mat-icon>close</mat-icon>
+    </button>
+</h2>
+
+<div *ngIf="!isModal"
+    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Détails de la Catégorie</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a routerLink="/admin/categories" class="btn btn-sm btn-outline-secondary">
+            <span data-feather="arrow-left"></span> Retour
+        </a>
+    </div>
+</div>
+
+<div [ngClass]="{'mat-dialog-content': isModal}">
+
+    <div *ngIf="category" class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+            <p class="card-text">Code de catégorie AdventureWorks.</p>
+            <a *ngIf="!isModal" [routerLink]="['/admin/categories', category.id, 'edit']"
+                class="btn btn-primary">Modifier</a>
+        </div>
+    </div>
+
+    <h3>Sous-Catégories associées</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let sub of subCategories">
+                    <td>{{ sub.id }}</td>
+                    <td>{{ sub.name }}</td>
+                </tr>
+                <tr *ngIf="subCategories.length === 0">
+                    <td colspan="3" class="text-center">Aucune sous-catégorie associée.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<mat-dialog-actions *ngIf="isModal" align="end">
+    <button mat-button (click)="dialogRef.close()">Fermer</button>
+</mat-dialog-actions>

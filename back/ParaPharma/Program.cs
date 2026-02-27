@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;  // OpenApi v2 namespace
 using ParaPharma.Core.Interfaces;
 using ParaPharma.Infrastructure.Data;
 using ParaPharma.Infrastructure.Services;
 using ParaPharma.Infrastructure.Repositories;
 using System.Text;
-using BCrypt.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CORS ---
+// Add CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular",
-        policy => policy.AllowAnyOrigin()
+        policy => policy.WithOrigins("http://localhost:4200")
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
@@ -27,18 +26,14 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-// --- DbContexts (PostgreSQL via Npgsql) ---
-var oltpConnStr = builder.Configuration.GetConnectionString("OltpConnection")
-    ?? throw new InvalidOperationException("OltpConnection manquant");
-var dwhConnStr = builder.Configuration.GetConnectionString("ExamDWHConnection")
-    ?? throw new InvalidOperationException("ExamDWHConnection manquant");
-
+// DbContexts
 builder.Services.AddDbContext<OltpDbContext>(options =>
-    options.UseNpgsql(oltpConnStr));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("OltpConnection")));
 
 builder.Services.AddDbContext<ExamDwhContext>(options =>
-    options.UseNpgsql(dwhConnStr));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ExamDWHConnection")));
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -61,31 +56,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// --- Swagger + JWT ---
+// 👇 CONFIGURATION SWAGGER COMPLÈTE AVEC JWT
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ParaPharma API", Version = "v1" });
 
+    // Configuration de la sécurité JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header. Exemple : \"Bearer {token}\"",
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    c.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
     {
         {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
+            new OpenApiSecuritySchemeReference("Bearer"),
             new List<string>()
         }
     });
@@ -102,37 +91,10 @@ if (app.Environment.IsDevelopment())
 
 // app.UseHttpsRedirection();
 
-app.UseRouting();
-app.UseCors("AllowAngular");
+app.UseCors("AllowAngular"); // Add this before Authentication/Authorization
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
-// --- Seed default admin user on first deployment ---
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<OltpDbContext>();
-
-    // Create all tables from the EF Core model if they don't exist yet
-    db.Database.EnsureCreated();
-
-    var adminEmail = app.Configuration["AdminSeed:Email"] ?? "admin@parapharma.com";
-    var adminPassword = app.Configuration["AdminSeed:Password"] ?? "Admin@123456";
-
-    if (!db.AppUsers.Any(u => u.Role == "Admin"))
-    {
-        db.AppUsers.Add(new ParaPharma.Core.Entities.AppUser
-        {
-            FirstName = "Admin",
-            LastName  = "ParaPharma",
-            Email     = adminEmail.ToLower(),
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword),
-            Role      = "Admin"
-        });
-        db.SaveChanges();
-        Console.WriteLine($"[Seed] Admin user created: {adminEmail}");
-    }
-}
 
 app.Run();

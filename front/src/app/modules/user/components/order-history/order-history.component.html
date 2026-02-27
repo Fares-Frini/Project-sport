@@ -1,0 +1,88 @@
+<div class="container mt-4">
+  <div class="row mb-4">
+    <div class="col">
+      <h1 class="h2 text-primary font-weight-bold">Mes Commandes</h1>
+      <p class="text-muted">Consultez et suivez l'historique de vos achats.</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Chargement...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && orders.length === 0" class="card shadow-sm border-0 rounded-lg p-5 text-center">
+    <div class="text-muted mb-3">
+      <i class="fas fa-shopping-bag fa-3x"></i>
+    </div>
+    <h3>Vous n'avez pas encore passé de commande</h3>
+    <p class="mb-4">Découvrez nos produits et commencez votre shopping !</p>
+    <a routerLink="/catalog" class="btn btn-primary btn-lg px-4 rounded-pill">Consulter le catalogue</a>
+  </div>
+
+  <div *ngIf="!loading && orders.length > 0">
+    <div *ngFor="let order of orders" class="card shadow-sm border-0 rounded-lg mb-4 hover-shadow">
+      <div class="card-header bg-white border-bottom-0 py-3 d-flex justify-content-between align-items-center">
+        <div>
+          <span class="badge" [ngClass]="{
+            'badge-warning': order.status === 'Pending',
+            'badge-info': order.status === 'Processing',
+            'badge-success': order.status === 'Shipped',
+            'badge-secondary': order.status === 'Delivered',
+            'badge-danger': order.status === 'Cancelled'
+          }">
+            {{ order.status }}
+          </span>
+          <span class="ml-2 font-weight-bold">Commande #{{ order.id }}</span>
+        </div>
+        <div class="text-muted small">
+          Passée le {{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-borderless table-sm mb-0">
+            <thead class="text-muted small uppercase">
+              <tr>
+                <th>Produit</th>
+                <th class="text-center">Quantité</th>
+                <th class="text-right">Prix Unitaire</th>
+                <th class="text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let detail of order.orderDetails">
+                <td>{{ detail.productName }}</td>
+                <td class="text-center">{{ detail.quantity }}</td>
+                <td class="text-right">{{ detail.unitPrice | currency:'EUR':'symbol':'1.2-2' }}</td>
+                <td class="text-right font-weight-bold">{{ (detail.quantity * detail.unitPrice) | currency:'EUR':'symbol':'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer bg-light border-top-0 d-flex justify-content-between align-items-center">
+        <span class="text-muted">Total de la commande</span>
+        <span class="h4 mb-0 text-primary font-weight-bold">{{ order.totalAmount | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.hover-shadow {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-shadow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+.badge {
+  padding: .5em .8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+</style>

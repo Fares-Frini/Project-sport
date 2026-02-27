@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { GlobalKPIs, CategorySales, SalesTrend } from '../../../core/models/analytics.models';
+import { GlobalKPIs, CategorySales, SalesTrend, DwhKPIs, CategoryRevenue, MonthlySalesTrend, ProductPerformance, SalesPersonPerformance, CustomerSegment, CitySales, CountrySales, ProductSales } from '../../../core/models/analytics.models';
 
 @Injectable({
     providedIn: 'root'
@@ -26,39 +26,55 @@ export class AnalyticsService {
         return this.http.get<SalesTrend[]>(`${this.dashboardUrl}/monthly-sales`);
     }
 
-    // ─── DWH Analytics endpoints ──────────────────────────────────────────
-    /** Top 20 persons sample from DimPerson */
-    getPersons(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/persons`);
+    // ─── Legacy/Compatibility endpoints ───────────────────────────────────
+    getSalesByCity(): Observable<CitySales[]> {
+        return this.http.get<CitySales[]>(`${this.apiUrl}/sales-by-city`);
     }
 
-    /** Count per PersonType from DimPerson */
+    getSalesByCountry(): Observable<CountrySales[]> {
+        return this.http.get<CountrySales[]>(`${this.apiUrl}/sales-by-country`);
+    }
+
+    getTopProducts(limit: number = 10): Observable<ProductSales[]> {
+        return this.http.get<ProductSales[]>(`${this.apiUrl}/top-products?limit=${limit}`);
+    }
+
     getPersonsByType(): Observable<any[]> {
         return this.http.get<any[]>(`${this.apiUrl}/persons-by-type`);
     }
 
-    /** Total customers in DimCustomer */
-    getCustomerCount(): Observable<any> {
-        return this.http.get<any>(`${this.apiUrl}/customers-count`);
+    getPersons(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/persons`);
     }
 
-    /** Top N products by revenue from Fact_Sales JOIN Dim_Product */
-    getTopProducts(limit: number = 10): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/top-products?limit=${limit}`);
-    }
-
-    /** Revenue grouped by sales territory from Fact_Sales JOIN Dim_SalesTerritory */
     getSalesByTerritory(): Observable<any[]> {
         return this.http.get<any[]>(`${this.apiUrl}/sales-by-territory`);
     }
 
-    /** Top N salespeople by revenue from Fact_Sales JOIN Dim_SalesPerson */
-    getTopSalesPersons(limit: number = 10): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/top-salespersons?limit=${limit}`);
+
+    // ─── New DWH Dashboard Endpoints ──────────────────────────────────────────
+
+    getDwhKPIs(): Observable<DwhKPIs> {
+        return this.http.get<DwhKPIs>(`${this.apiUrl}/dwh/kpis`);
     }
 
-    /** Credit card type distribution from Dim_CreditCard */
-    getCreditCardsByType(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/credit-cards-by-type`);
+    getDwhSalesByCategory(): Observable<CategoryRevenue[]> {
+        return this.http.get<CategoryRevenue[]>(`${this.apiUrl}/dwh/sales-by-category`);
+    }
+
+    getDwhMonthlySalesTrend(): Observable<MonthlySalesTrend[]> {
+        return this.http.get<MonthlySalesTrend[]>(`${this.apiUrl}/dwh/monthly-sales-trend`);
+    }
+
+    getDwhTopProductsPerformance(): Observable<ProductPerformance[]> {
+        return this.http.get<ProductPerformance[]>(`${this.apiUrl}/dwh/top-products-performance`);
+    }
+
+    getDwhSalesPersonPerformance(): Observable<SalesPersonPerformance[]> {
+        return this.http.get<SalesPersonPerformance[]>(`${this.apiUrl}/dwh/salesperson-performance`);
+    }
+
+    getDwhCustomerSegmentation(): Observable<CustomerSegment[]> {
+        return this.http.get<CustomerSegment[]>(`${this.apiUrl}/dwh/customer-segmentation`);
     }
 }

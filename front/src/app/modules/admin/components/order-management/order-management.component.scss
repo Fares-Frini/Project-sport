@@ -1,0 +1,21 @@
+/* OrderManagementComponent styles */
+.table th {
+    border-top: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+}
+
+.table td {
+    padding: 1rem 0.75rem;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}

@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        //Initialise le formulaire d'inscription avec les validateurs
         this.registerForm = this.formBuilder.group({
             fullName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
@@ -32,6 +33,7 @@ export class RegisterComponent implements OnInit {
     }
 
     // Custom validator for password matching
+    //Valideur personnalisé pour la correspondance des mots de passe
     mustMatch(controlName: string, matchingControlName: string) {
         return (formGroup: FormGroup) => {
             const control = formGroup.controls[controlName];
@@ -55,16 +57,19 @@ export class RegisterComponent implements OnInit {
         this.submitted = true;
 
         // stop here if form is invalid
+        //Arrête ici si le formulaire est invalide
         if (this.registerForm.invalid) {
             return;
         }
 
         this.loading = true;
+        //Divise le nom complet en prénom et nom
         const fullName = this.registerForm.value.fullName || '';
         const nameParts = fullName.trim().split(' ');
         const firstName = nameParts[0] || fullName;
         const lastName = nameParts.slice(1).join(' ') || '.';
 
+        //Appelle le service d'inscription
         this.authService.register({
             firstName,
             lastName,
@@ -72,9 +77,11 @@ export class RegisterComponent implements OnInit {
             password: this.registerForm.value.password,
             role: 'User'
         }).subscribe({
+            //Gère la réponse réussie
             next: () => {
                 this.router.navigate(['/auth/login'], { queryParams: { registered: true } });
             },
+            //Gère la réponse d'erreur
             error: (err: any) => {
                 this.error = err?.error?.message || err?.message || 'Erreur lors de l\'inscription';
                 this.loading = false;

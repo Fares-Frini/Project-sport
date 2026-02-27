@@ -27,9 +27,8 @@ namespace ParaPharma.API.Controllers
                 TotalCategories = await _oltpContext.Categories.CountAsync(),
                 TotalUsers = await _oltpContext.AppUsers.CountAsync(),
                 TotalCustomers = await _oltpContext.Customers.CountAsync(),
-                // Simulate orders and revenue from DWH if FactSale is complex or just count Customers for now as dummy
-                TotalOrders = 150, // Placeholder for orders
-                TotalRevenue = 12500.50m // Placeholder for revenue
+                TotalOrders = await _oltpContext.Orders.CountAsync(),
+                TotalRevenue = await _oltpContext.Orders.AnyAsync() ? await _oltpContext.Orders.SumAsync(o => o.TotalAmount) : 0
             };
 
             return Ok(kpis);
@@ -38,33 +37,216 @@ namespace ParaPharma.API.Controllers
         [HttpGet("monthly-sales")]
         public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetMonthlySales()
         {
-            // Dummy data for Chart.js
-            var sales = new List<SalesDataDto>
+            try
             {
-                new SalesDataDto { Label = "Jan", Value = 1200 },
-                new SalesDataDto { Label = "Feb", Value = 1900 },
-                new SalesDataDto { Label = "Mar", Value = 3000 },
-                new SalesDataDto { Label = "Apr", Value = 2500 },
-                new SalesDataDto { Label = "May", Value = 4200 },
-                new SalesDataDto { Label = "Jun", Value = 3800 }
-            };
+                var orders = await _oltpContext.Orders.ToListAsync();
+                var sales = orders
+                    .GroupBy(o => new { o.OrderDate.Year, o.OrderDate.Month })
+                    .Select(g => new SalesDataDto
+                    {
+                        Label = $"{g.Key.Month}/{g.Key.Year}",
+                        Value = g.Sum(o => o.TotalAmount),
+                        OrderCount = g.Count()
+                    })
+                    .OrderBy(x => {
+                        var parts = x.Label.Split('/');
+                        return int.Parse(parts[1]) * 100 + int.Parse(parts[0]);
+                    })
+                    .ToList();
+                return Ok(sales);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
-            return Ok(sales);
+        [HttpGet("status-distribution")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetStatusDistribution()
+        {
+            var distribution = await _oltpContext.Orders
+                .GroupBy(o => o.Status)
+                .Select(g => new SalesDataDto
+                {
+                    Label = g.Key,
+                    Value = g.Count()
+                })
+                .ToListAsync();
+
+            return Ok(distribution);
         }
 
         [HttpGet("category-sales")]
         public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetCategorySales()
         {
-            var categorySales = await _oltpContext.Categories
-                .Select(c => new SalesDataDto
+            var categorySales = await _oltpContext.OrderDetails
+                .Join(_oltpContext.Products, od => od.ProductId, p => p.Id, (od, p) => new { od, p })
+                .Join(_oltpContext.Categories, x => x.p.CategoryId, c => c.Id, (x, c) => new { x.od, c })
+                .GroupBy(x => x.c.Name)
+                .Select(g => new SalesDataDto
                 {
-                    Label = c.Name,
-                    Value = _oltpContext.Products.Count(p => p.CategoryId == c.Id) * 100 // Dummy value calculation
+                    Label = g.Key,
+                    Value = g.Sum(x => x.od.UnitPrice * x.od.Quantity)
                 })
                 .ToListAsync();
 
             return Ok(categorySales);
         }
+
+        [HttpGet("subcategory-sales")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetSubCategorySales()
+        {
+            try
+            {
+                var data = await _oltpContext.OrderDetails
+                    .Include(od => od.Product)
+                    .ThenInclude(p => p!.SubCategory)
+                    .ToListAsync();
+                
+                var result = data
+                    .Where(od => od.Product != null)
+                    .GroupBy(od => od.Product!.SubCategory != null ? od.Product.SubCategory.Name : "Sans sous-catégorie")
+                    .Select(g => new SalesDataDto
+                    {
+                        Label = g.Key,
+                        Value = g.Sum(od => od.UnitPrice * od.Quantity)
+                    })
+                    .OrderByDescending(x => x.Value)
+                    .ToList();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("user-growth")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetUserGrowth()
+        {
+            var growth = await _oltpContext.Customers
+                .GroupBy(c => new { Year = c.CreatedAt.Year, Month = c.CreatedAt.Month })
+                .Select(g => new SalesDataDto
+                {
+                    Label = $"{g.Key.Month}/{g.Key.Year}",
+                    Value = g.Count()
+                })
+                .ToListAsync();
+
+            var sortedGrowth = growth
+                .OrderBy(x => {
+                    var parts = x.Label.Split('/');
+                    if (parts.Length < 2) return 0;
+                    return int.Parse(parts[1]) * 100 + int.Parse(parts[0]);
+                })
+                .ToList();
+
+            return Ok(sortedGrowth);
+        }
+
+        [HttpGet("user-distribution")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetUserDistribution()
+        {
+            var distribution = await _oltpContext.AppUsers
+                .GroupBy(u => u.Role) 
+                .Select(g => new SalesDataDto
+                {
+                    Label = g.Key,
+                    Value = g.Count()
+                })
+                .ToListAsync();
+
+            return Ok(distribution);
+        }
+
+        [HttpGet("products-by-subcategory")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetProductsBySubCategory()
+        {
+            var data = await _oltpContext.Products
+                .Include(p => p.SubCategory)
+                .GroupBy(p => p.SubCategory != null ? p.SubCategory.Name : "Sans sous-catégorie")
+                .Select(g => new SalesDataDto
+                {
+                    Label = g.Key,
+                    Value = g.Count()
+                })
+                .ToListAsync();
+
+            return Ok(data);
+        }
+
+        [HttpGet("stock-by-subcategory")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetStockBySubCategory()
+        {
+            var data = await _oltpContext.Products
+                .Include(p => p.SubCategory)
+                .GroupBy(p => p.SubCategory != null ? p.SubCategory.Name : "Sans sous-catégorie")
+                .Select(g => new SalesDataDto
+                {
+                    Label = g.Key,
+                    Value = g.Sum(p => p.StockQuantity)
+                })
+                .ToListAsync();
+
+            return Ok(data);
+        }
+
+        [HttpGet("price-distribution")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetPriceDistribution()
+        {
+            var products = await _oltpContext.Products.ToListAsync();
+            
+            var distribution = new List<SalesDataDto>
+            {
+                new SalesDataDto { Label = "< 100$", Value = products.Count(p => p.Price < 100) },
+                new SalesDataDto { Label = "100$ - 500$", Value = products.Count(p => p.Price >= 100 && p.Price <= 500) },
+                new SalesDataDto { Label = "500$ - 1500$", Value = products.Count(p => p.Price > 500 && p.Price <= 1500) },
+                new SalesDataDto { Label = "> 1500$", Value = products.Count(p => p.Price > 1500) }
+            };
+
+            return Ok(distribution);
+        }
+
+        [HttpGet("top-products-oltp")]
+        public async Task<ActionResult<IEnumerable<SalesDataDto>>> GetTopProductsOltp()
+        {
+            var topProducts = await _oltpContext.OrderDetails
+                .Include(od => od.Product)
+                .Where(od => od.Product != null)
+                .GroupBy(od => od.Product!.Name)
+                .Select(g => new SalesDataDto
+                {
+                    Label = g.Key,
+                    Value = g.Sum(od => od.Quantity) 
+                })
+                .OrderByDescending(x => x.Value)
+                .Take(10)
+                .ToListAsync();
+
+            return Ok(topProducts);
+        }
+
+        [HttpGet("recent-orders")]
+        public async Task<ActionResult<IEnumerable<RecentOrderDto>>> GetRecentOrders()
+        {
+            var recentOrders = await _oltpContext.Orders
+                .Include(o => o.AppUser)
+                .OrderByDescending(o => o.OrderDate)
+                .Take(5)
+                .Select(o => new RecentOrderDto
+                {
+                    Id = o.Id,
+                    CustomerName = o.AppUser != null ? $"{o.AppUser.FirstName} {o.AppUser.LastName}" : "Client Inconnu",
+                    OrderDate = o.OrderDate,
+                    TotalAmount = o.TotalAmount,
+                    Status = o.Status
+                })
+                .ToListAsync();
+
+            return Ok(recentOrders);
+        }
+
         [HttpGet("check-db")]
         public async Task<IActionResult> CheckDb()
         {
@@ -72,29 +254,13 @@ namespace ParaPharma.API.Controllers
             
             try 
             {
-                var productCount = await _oltpContext.Products.CountAsync();
-                var categoryCount = await _oltpContext.Categories.CountAsync();
-                var subCategoryCount = await _oltpContext.SubCategories.CountAsync();
-                
-                results.Add("OLTP_Status", "OK");
-                results.Add("OLTP_ProductCount", productCount.ToString());
-                results.Add("OLTP_CategoryCount", categoryCount.ToString());
-                results.Add("OLTP_SubCategoryCount", subCategoryCount.ToString());
+                results.Add("OLTP_ProductCount", (await _oltpContext.Products.CountAsync()).ToString());
+                results.Add("OLTP_OrderCount", (await _oltpContext.Orders.CountAsync()).ToString());
+                results.Add("OLTP_AppUserCount", (await _oltpContext.AppUsers.CountAsync()).ToString());
             }
             catch (Exception ex)
             {
                 results.Add("OLTP_Error", ex.Message);
-            }
-
-            try 
-            {
-                var personCount = await _dwhContext.DimPersons.CountAsync();
-                results.Add("DWH_Status", "OK");
-                results.Add("DWH_PersonCount", personCount.ToString());
-            }
-            catch (Exception ex)
-            {
-                results.Add("DWH_Error", ex.Message);
             }
 
             return Ok(results);

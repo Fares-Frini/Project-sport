@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Cart } from '../../../../core/models/cart.models';
 import { CartService } from '../../../../core/services/cart.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -15,7 +17,11 @@ export class ShoppingCartComponent implements OnInit {
   orderRef = '';
   orderDate = '';
 
-  constructor(private cartService: CartService) { }
+  constructor(
+    private cartService: CartService,
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.cart$ = this.cartService.cart$;
@@ -38,15 +44,25 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   confirmOrder(total: number): void {
-    // Generate static order reference
-    const rand = Math.floor(10000 + Math.random() * 90000);
-    this.orderRef = `CMD-${new Date().getFullYear()}-${rand}`;
-    this.orderDate = new Date().toLocaleDateString('fr-FR', {
-      day: '2-digit', month: 'long', year: 'numeric',
-      hour: '2-digit', minute: '2-digit'
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/auth/login'], { queryParams: { returnUrl: '/cart' } });
+      return;
+    }
+
+    this.cartService.checkout().subscribe({
+      next: (order) => {
+        this.orderRef = `CMD-${order.id}`;
+        this.orderDate = new Date(order.orderDate).toLocaleDateString('fr-FR', {
+          day: '2-digit', month: 'long', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+        this.orderConfirmed = true;
+        this.cartService.clearCart();
+      },
+      error: (err) => {
+        console.error('Erreur lors de la commande:', err);
+        alert('Une erreur est survenue lors de la validation de votre commande. Veuillez réessayer.');
+      }
     });
-    this.orderConfirmed = true;
-    // Clear the cart
-    this.cartService.clearCart();
   }
 }

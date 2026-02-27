@@ -11,7 +11,7 @@ export interface Product {
     stockQuantity?: number;
     imageUrl?: string;
 }
-
+//Représente un filtre de produits.
 export interface ProductFilter {
     searchTerm?: string;
     categoryId?: number;
@@ -23,6 +23,7 @@ export interface ProductFilter {
     pageSize: number;
 }
 
+//Représente un résultat paginé.
 export interface PagedResult<T> {
     items: T[];
     totalCount: number;

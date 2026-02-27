@@ -3,12 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { OltpRoutingModule } from './oltp-routing.module';
 import { SharedModule } from '../../shared/shared.module';
-import { CategoryListComponent } from './components/categories/category-list/category-list.component';
-import { CategoryFormComponent } from './components/categories/category-form/category-form.component';
-import { CategoryDetailComponent } from './components/categories/category-detail/category-detail.component';
-import { SubcategoryListComponent } from './components/subcategories/subcategory-list/subcategory-list.component';
-import { SubcategoryFormComponent } from './components/subcategories/subcategory-form/subcategory-form.component';
-import { SubcategoryDetailComponent } from './components/subcategories/subcategory-detail/subcategory-detail.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,12 +18,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    CategoryListComponent,
-    CategoryFormComponent,
-    CategoryDetailComponent,
-    SubcategoryListComponent,
-    SubcategoryFormComponent,
-    SubcategoryDetailComponent
   ],
   imports: [
     CommonModule,
@@ -49,10 +37,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     MatProgressSpinnerModule
   ],
   exports: [
-    CategoryListComponent,
-    CategoryDetailComponent,
-    SubcategoryListComponent,
-    SubcategoryDetailComponent
   ]
 })
 export class OltpModule { }

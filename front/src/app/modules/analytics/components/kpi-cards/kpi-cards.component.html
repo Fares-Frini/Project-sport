@@ -16,18 +16,18 @@
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card bg-warning text-dark h-100">
+        <div class="card bg-warning text-dark h-100 shadow-sm border-0">
             <div class="card-body">
-                <h6 class="text-uppercase mb-2">Panier Moyen</h6>
-                <h2 class="mb-0">{{ kpis.avgOrderValue | currency:'USD' }}</h2>
+                <h6 class="text-uppercase mb-2 small fw-bold">Catégories</h6>
+                <h2 class="mb-0">{{ kpis.totalCategories | number }}</h2>
             </div>
         </div>
     </div>
     <div class="col-xl-3 col-sm-6">
-        <div class="card bg-danger text-white h-100">
+        <div class="card bg-danger text-white h-100 shadow-sm border-0">
             <div class="card-body">
-                <h6 class="text-uppercase mb-2">Clients</h6>
-                <h2 class="mb-0">{{ kpis.totalCustomers | number }}</h2>
+                <h6 class="text-uppercase mb-2 small fw-bold">Produits</h6>
+                <h2 class="mb-0">{{ kpis.totalProducts | number }}</h2>
             </div>
         </div>
     </div>

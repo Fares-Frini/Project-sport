@@ -31,7 +31,7 @@ namespace ParaPharma.Infrastructure.Data
             modelBuilder.Entity<DimCustomer>().ToTable("Dim_Customer");
             modelBuilder.Entity<DimProduct>().ToTable("Dim_Product");
             modelBuilder.Entity<DimProductSubCategory>().ToTable("Dim_Product_SubCategory");
-            modelBuilder.Entity<DimProductCategory>().ToTable("Dim_Product_Category");
+            modelBuilder.Entity<DimProductCategory>().ToTable("Dim_ProductCategory");
             modelBuilder.Entity<DimSalesTerritory>().ToTable("Dim_SalesTerritory");
             modelBuilder.Entity<DimSalesPerson>().ToTable("Dim_SalesPerson");
             modelBuilder.Entity<FactSale>().ToTable("Fact_Sales");

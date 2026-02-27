@@ -11,7 +11,7 @@ namespace ParaPharma.Core.Entities.DWH
         public DateTime? ModifiedDate { get; set; }
 
         // Navigation properties
-        public DimProductSubCategory ProductCategory { get; set; } = null!; // Note: This should probably be DimProductCategory but staying consistent with user's warning log if it matched. Wait, let me check the file.
+        public DimProductCategory ProductCategory { get; set; } = null!; 
         public ICollection<DimProduct> Products { get; set; }
             = new List<DimProduct>();
     }

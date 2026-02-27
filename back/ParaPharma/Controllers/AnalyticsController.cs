@@ -13,9 +13,128 @@ public class AnalyticsController : ControllerBase
         _context = context;
     }
 
-    // ─── DimPerson ───────────────────────────────────────────────────────────
+    // ─── DWH Dashboard Endpoints ───────────────────────────────────────────
 
-    /// <summary>GET: api/analytics/persons — Sample of 20 persons from DWH</summary>
+    /// <summary>GET: api/analytics/dwh/kpis</summary>
+    [HttpGet("dwh/kpis")]
+    public async Task<IActionResult> GetDwhKpis()
+    {
+        var totalRevenue = await _context.FactSales.SumAsync(f => f.LineTotal);
+        var totalOrders = await _context.FactSales.Select(f => f.SalesOrderID).Distinct().CountAsync();
+        var totalCustomers = await _context.DimCustomers.CountAsync();
+        
+        var kpis = new ParaPharma.Core.DTOs.Analytics.DwhKpiDto
+        {
+            TotalRevenue = Math.Round(totalRevenue, 2),
+            TotalOrders = totalOrders,
+            TotalCustomers = totalCustomers,
+            AverageBasket = totalOrders > 0 ? Math.Round(totalRevenue / totalOrders, 2) : 0
+        };
+
+        return Ok(kpis);
+    }
+
+    /// <summary>GET: api/analytics/dwh/sales-by-category</summary>
+    [HttpGet("dwh/sales-by-category")]
+    public async Task<IActionResult> GetSalesByCategory()
+    {
+        var results = await _context.FactSales
+            .Join(_context.DimProducts, f => f.ProductID, p => p.ProductID, (f, p) => new { f, p })
+            .Join(_context.DimProductSubCategories, x => x.p.ProductSubcategoryID, s => s.ProductSubcategoryID, (x, s) => new { x.f, s })
+            .Join(_context.DimProductCategories, x => x.s.ProductCategoryID, c => c.ProductCategoryID, (x, c) => new { x.f, c })
+            .GroupBy(x => x.c.Name)
+            .Select(g => new ParaPharma.Core.DTOs.Analytics.CategoryRevenueDto
+            {
+                Category = g.Key,
+                Revenue = Math.Round(g.Sum(x => x.f.LineTotal), 2)
+            })
+            .OrderByDescending(x => x.Revenue)
+            .ToListAsync();
+
+        return Ok(results);
+    }
+
+    /// <summary>GET: api/analytics/dwh/monthly-sales-trend</summary>
+    [HttpGet("dwh/monthly-sales-trend")]
+    public async Task<IActionResult> GetMonthlySalesTrend()
+    {
+        var results = await _context.FactSales
+            .GroupBy(f => new { f.OrderDate.Year, f.OrderDate.Month })
+            .Select(g => new ParaPharma.Core.DTOs.Analytics.MonthlySalesTrendDto
+            {
+                MonthLabel = $"{g.Key.Month}/{g.Key.Year}",
+                Revenue = Math.Round(g.Sum(x => x.LineTotal), 2)
+            })
+            .ToListAsync();
+
+        // Sort chronologically in memory (simplified)
+        var ordered = results
+            .OrderBy(x => DateTime.ParseExact(x.MonthLabel, "M/yyyy", System.Globalization.CultureInfo.InvariantCulture))
+            .ToList();
+
+        return Ok(ordered);
+    }
+
+    /// <summary>GET: api/analytics/dwh/top-products-performance</summary>
+    [HttpGet("dwh/top-products-performance")]
+    public async Task<IActionResult> GetTopProductsPerformance()
+    {
+        var results = await _context.FactSales
+            .Join(_context.DimProducts, f => f.ProductID, p => p.ProductID, (f, p) => new { f, p })
+            .GroupBy(x => x.p.Name)
+            .Select(g => new ParaPharma.Core.DTOs.Analytics.ProductPerformanceDto
+            {
+                ProductName = g.Key,
+                Revenue = Math.Round(g.Sum(x => x.f.LineTotal), 2),
+                AverageDiscount = Math.Round(g.Average(x => x.f.UnitPriceDiscount), 4),
+                TotalQty = g.Sum(x => x.f.OrderQty)
+            })
+            .OrderByDescending(x => x.Revenue)
+            .Take(20)
+            .ToListAsync();
+
+        return Ok(results);
+    }
+
+    /// <summary>GET: api/analytics/dwh/salesperson-performance</summary>
+    [HttpGet("dwh/salesperson-performance")]
+    public async Task<IActionResult> GetSalesPersonPerformance()
+    {
+        var results = await _context.FactSales
+            .Where(f => f.SalesPersonID != null)
+            .Join(_context.DimSalesPersons, f => f.SalesPersonID, sp => sp.SalesPersonID, (f, sp) => new { f, sp })
+            .GroupBy(x => new { x.sp.FirstName, x.sp.LastName, x.sp.SalesQuota })
+            .Select(g => new ParaPharma.Core.DTOs.Analytics.SalesPersonPerformanceDto
+            {
+                FullName = $"{g.Key.FirstName} {g.Key.LastName}",
+                Revenue = Math.Round(g.Sum(x => x.f.LineTotal), 2),
+                Quota = g.Key.SalesQuota
+            })
+            .OrderByDescending(x => x.Revenue)
+            .ToListAsync();
+
+        return Ok(results);
+    }
+
+    /// <summary>GET: api/analytics/dwh/customer-segmentation")]
+    [HttpGet("dwh/customer-segmentation")]
+    public async Task<IActionResult> GetCustomerSegmentation()
+    {
+        // Simple segmentation based on person type for demo
+        var results = await _context.DimPersons
+            .GroupBy(p => p.PersonType)
+            .Select(g => new ParaPharma.Core.DTOs.Analytics.CustomerSegmentDto
+            {
+                Segment = g.Key ?? "Other",
+                Count = g.Count()
+            })
+            .ToListAsync();
+
+        return Ok(results);
+    }
+
+    // ─── Legacy Compatibility Endpoints (for old Dashboard) ───────────────
+
     [HttpGet("persons")]
     public async Task<IActionResult> GetPersons()
     {
@@ -26,7 +145,6 @@ public class AnalyticsController : ControllerBase
         return Ok(persons);
     }
 
-    /// <summary>GET: api/analytics/persons-by-type — Count per PersonType</summary>
     [HttpGet("persons-by-type")]
     public async Task<IActionResult> GetPersonDistribution()
     {
@@ -38,89 +156,72 @@ public class AnalyticsController : ControllerBase
         return Ok(distribution);
     }
 
-    /// <summary>GET: api/analytics/customers-count — Total customers in DimCustomer</summary>
-    [HttpGet("customers-count")]
-    public async Task<IActionResult> GetCustomerCount()
-    {
-        var count = await _context.DimCustomers.CountAsync();
-        return Ok(new { TotalCustomers = count });
-    }
-
-    // ─── FactSale + Dim joins ─────────────────────────────────────────────────
-
-    /// <summary>GET: api/analytics/top-products?limit=10 — Top N products by revenue (DWH)</summary>
     [HttpGet("top-products")]
     public async Task<IActionResult> GetTopProducts([FromQuery] int limit = 10)
     {
         var results = await _context.FactSales
-            .Join(_context.DimProducts,
-                f => f.ProductID,
-                p => p.ProductID,
-                (f, p) => new { f.LineTotal, ProductName = p.Name })
+            .Join(_context.DimProducts, f => f.ProductID, p => p.ProductID, (f, p) => new { f.LineTotal, ProductName = p.Name })
             .GroupBy(x => x.ProductName)
-            .Select(g => new
-            {
-                Label = g.Key,
-                Value = Math.Round(g.Sum(x => x.LineTotal), 2)
-            })
+            .Select(g => new { Label = g.Key, Value = Math.Round(g.Sum(x => x.LineTotal), 2) })
             .OrderByDescending(x => x.Value)
             .Take(limit)
             .ToListAsync();
         return Ok(results);
     }
 
-    /// <summary>GET: api/analytics/sales-by-territory — Total revenue per sales territory (DWH)</summary>
+    [HttpGet("sales-by-city")]
+    public async Task<IActionResult> GetSalesByCity()
+    {
+        // FactSales doesn't have City directly, usually joined via DimCustomer or similar
+        // For compatibility, returning empty or mocked from territory if needed
+        return Ok(new List<object>()); 
+    }
+
+    [HttpGet("sales-by-country")]
     [HttpGet("sales-by-territory")]
-    public async Task<IActionResult> GetSalesByTerritory()
+    public async Task<IActionResult> GetSalesByCountry()
     {
         var results = await _context.FactSales
             .Where(f => f.TerritoryID != null)
-            .Join(_context.DimSalesTerritories,
-                f => f.TerritoryID,
-                t => t.TerritoryID,
-                (f, t) => new { t.Name, f.LineTotal })
+            .Join(_context.DimSalesTerritories, f => f.TerritoryID, t => t.TerritoryID, (f, t) => new { t.Name, f.LineTotal })
             .GroupBy(x => x.Name)
-            .Select(g => new
-            {
-                Label = g.Key,
-                Value = Math.Round(g.Sum(x => x.LineTotal), 2)
-            })
-            .OrderByDescending(x => x.Value)
+            .Select(g => new { Label = g.Key, Value = Math.Round(g.Sum(x => x.LineTotal), 2) })
             .ToListAsync();
         return Ok(results);
     }
 
-    /// <summary>GET: api/analytics/top-salespersons?limit=10 — Top N salespeople by revenue (DWH)</summary>
     [HttpGet("top-salespersons")]
     public async Task<IActionResult> GetTopSalesPersons([FromQuery] int limit = 10)
     {
         var results = await _context.FactSales
             .Where(f => f.SalesPersonID != null)
-            .Join(_context.DimSalesPersons,
-                f => f.SalesPersonID,
-                sp => sp.SalesPersonID,
-                (f, sp) => new { FullName = sp.FirstName + " " + sp.LastName, f.LineTotal })
-            .GroupBy(x => x.FullName)
+            .Join(_context.DimSalesPersons, f => f.SalesPersonID, sp => sp.SalesPersonID, (f, sp) => new { f, sp })
+            .GroupBy(x => new { x.sp.FirstName, x.sp.LastName })
             .Select(g => new
             {
-                Label = g.Key,
-                Value = Math.Round(g.Sum(x => x.LineTotal), 2)
+                Label = $"{g.Key.FirstName} {g.Key.LastName}",
+                Value = Math.Round(g.Sum(x => x.f.LineTotal), 2)
             })
             .OrderByDescending(x => x.Value)
             .Take(limit)
             .ToListAsync();
+
         return Ok(results);
     }
 
-    /// <summary>GET: api/analytics/credit-cards-by-type — Distribution of credit card types (DWH)</summary>
     [HttpGet("credit-cards-by-type")]
     public async Task<IActionResult> GetCreditCardsByType()
     {
-        var results = await _context.DimCreditCards
-            .GroupBy(c => c.CardType)
-            .Select(g => new { Label = g.Key, Value = g.Count() })
-            .OrderByDescending(x => x.Value)
+        var results = await _context.FactSales
+            .Join(_context.DimCreditCards, f => f.CreditCardID, c => c.CreditCardID, (f, c) => new { c.CardType, f.LineTotal })
+            .GroupBy(x => x.CardType)
+            .Select(g => new
+            {
+                Label = g.Key,
+                Value = g.Count()
+            })
             .ToListAsync();
+
         return Ok(results);
     }
 }

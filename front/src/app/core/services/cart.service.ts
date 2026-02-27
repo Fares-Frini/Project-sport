@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { CartItem, Cart, CartSummary } from '../models/cart.models';
 import { Product } from '../models/product.models';
 
@@ -8,14 +10,15 @@ import { Product } from '../models/product.models';
     providedIn: 'root'
 })
 export class CartService {
-    private readonly STORAGE_KEY = 'sportstore_cart';
-    private cartItemsSubject = new BehaviorSubject<CartItem[]>(this.loadFromStorage());
-    public cartItems$ = this.cartItemsSubject.asObservable();
+    private readonly STORAGE_KEY = 'sportstore_cart'; //Clé de stockage dans localStorage
+    private readonly API_URL = `${environment.apiUrl}/orders`;
+    private cartItemsSubject = new BehaviorSubject<CartItem[]>(this.loadFromStorage()); //Subject pour stocker les articles du panier
+    public cartItems$ = this.cartItemsSubject.asObservable(); //Observable pour les articles du panier
 
-    public cart$: Observable<Cart>;
-    public cartSummary$: Observable<CartSummary>;
+    public cart$: Observable<Cart>; //Observable pour le panier
+    public cartSummary$: Observable<CartSummary>; //Observable pour le résumé du panier
 
-    constructor() {
+    constructor(private http: HttpClient) {
         this.cart$ = this.cartItems$.pipe(
             map(items => this.calculateCart(items))
         );
@@ -74,12 +77,24 @@ export class CartService {
         this.cartItemsSubject.next(filtered);
     }
 
-    clearCart(): void {
+    checkout(): Observable<any> {
+        const currentItems = this.cartItemsSubject.value;
+        const orderData = {
+            items: currentItems.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity
+            }))
+        };
+
+        return this.http.post(this.API_URL, orderData);
+    }
+
+    clearCart(): void { //Vide le panier
         this.cartItemsSubject.next([]);
     }
 
     private calculateCart(items: CartItem[]): Cart {
-        const total = items.reduce((sum, item) => sum + item.totalPrice, 0);
+        const total = items.reduce((sum, item) => sum + item.totalPrice, 0); //Calcule le total du panier
 
         return {
             items: items,
@@ -91,8 +106,8 @@ export class CartService {
 
     private loadFromStorage(): CartItem[] {
         try {
-            const stored = localStorage.getItem(this.STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
+            const stored = localStorage.getItem(this.STORAGE_KEY); //Récupère les articles du panier depuis localStorage
+            return stored ? JSON.parse(stored) : []; //Retourne les articles du panier depuis localStorage
         } catch {
             return [];
         }
@@ -100,9 +115,9 @@ export class CartService {
 
     private saveToStorage(items: CartItem[]): void {
         try {
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items));
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(items)); //Sauvegarde les articles du panier dans localStorage
         } catch (error) {
-            console.error('Erreur lors de la sauvegarde du panier:', error);
+            console.error('Erreur lors de la sauvegarde du panier:', error); //Erreur lors de la sauvegarde du panier
         }
     }
 }

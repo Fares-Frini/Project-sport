@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParaPharma.Core.DTOs;
 using ParaPharma.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParaPharma.API.Controllers;
 
@@ -47,6 +48,7 @@ public class ProductsController : ControllerBase
 
     // POST: api/products
     [HttpPost]
+    [Authorize(Roles = "admin,Admin")]
     public async Task<ActionResult<ProductDto>> CreateProduct(CreateProductDto createProductDto)
     {
         if (!ModelState.IsValid)
@@ -60,6 +62,7 @@ public class ProductsController : ControllerBase
 
     // PUT: api/products/5
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin,Admin")]
     public async Task<IActionResult> UpdateProduct(
     [FromRoute] int id,
     [FromBody] UpdateProductDto updateProductDto)
@@ -77,6 +80,7 @@ public class ProductsController : ControllerBase
 
     // DELETE: api/products/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin,Admin")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
         var success = await _productRepository.DeleteAsync(id);

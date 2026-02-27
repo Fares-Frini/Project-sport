@@ -12,7 +12,7 @@ export interface DashboardKpi {
     totalUsers: number;
     avgDiscount?: number;
 }
-
+//Récupère les statistiques et données pour les graphiques du tableau de bord.
 export interface MonthlySales {
     month: string;
     revenue: number;
@@ -50,33 +50,76 @@ export class DashboardService {
         );
     }
 
+    getSubCategorySales(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/subcategory-sales`).pipe(
+            tap((data: any[]) => console.log('DashboardService: SubCategory Sales reçus:', data))
+        );
+    }
+
     getPersonDistribution(): Observable<any[]> {
         return this.http.get<any[]>(`${environment.apiUrl}/analytics/persons-by-type`).pipe(
             tap((data: any[]) => console.log('DashboardService: Person Distribution reçue:', data))
         );
     }
 
-    getTopProducts(limit: number): Observable<{ label: string; value: number }[]> {
-        return this.http.get<{ label: string; value: number }[]>(
-            `${environment.apiUrl}/analytics/top-products?limit=${limit}`
+    getPersons(): Observable<any[]> {
+        return this.http.get<any[]>(`${environment.apiUrl}/analytics/persons`).pipe(
+            tap((data: any[]) => console.log('DashboardService: Persons sample reçue:', data))
         );
     }
 
-    getSalesByTerritory(): Observable<{ label: string; value: number }[]> {
-        return this.http.get<{ label: string; value: number }[]>(
-            `${environment.apiUrl}/analytics/sales-by-territory`
+    getTopProducts(limit = 10): Observable<any[]> {
+        return this.http.get<any[]>(`${environment.apiUrl}/analytics/top-products?limit=${limit}`);
+    }
+
+    getSalesByTerritory(): Observable<any[]> {
+        return this.http.get<any[]>(`${environment.apiUrl}/analytics/sales-by-territory`);
+    }
+
+    getTopSalesPersons(limit = 10): Observable<any[]> {
+        return this.http.get<any[]>(`${environment.apiUrl}/analytics/top-salespersons?limit=${limit}`);
+    }
+
+    getCreditCardsByType(): Observable<any[]> {
+        return this.http.get<any[]>(`${environment.apiUrl}/analytics/credit-cards-by-type`);
+    }
+
+
+    getUserGrowth(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/user-growth`).pipe(
+            tap((data: any[]) => console.log('DashboardService: User Growth reçu:', data))
         );
     }
 
-    getTopSalesPersons(limit: number): Observable<{ label: string; value: number }[]> {
-        return this.http.get<{ label: string; value: number }[]>(
-            `${environment.apiUrl}/analytics/top-salespersons?limit=${limit}`
-        );
+    getProductsBySubCategory(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/products-by-subcategory`);
     }
 
-    getCreditCardsByType(): Observable<{ label: string; value: number }[]> {
-        return this.http.get<{ label: string; value: number }[]>(
-            `${environment.apiUrl}/analytics/credit-cards-by-type`
-        );
+    getStockBySubCategory(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/stock-by-subcategory`);
+    }
+
+    getPriceDistribution(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/price-distribution`);
+    }
+
+    getTopProductsOltp(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/top-products-oltp`);
+    }
+
+    getRecentOrders(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/recent-orders`);
+    }
+
+    getStatusDistribution(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/status-distribution`);
+    }
+
+    getUserDistribution(): Observable<any[]> {
+        return this.http.get<any[]>(`${this.apiUrl}/user-distribution`);
     }
 }
+
+
+
+

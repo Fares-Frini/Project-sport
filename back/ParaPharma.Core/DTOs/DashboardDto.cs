@@ -14,5 +14,6 @@ namespace ParaPharma.Core.DTOs
     {
         public string Label { get; set; } = string.Empty;
         public decimal Value { get; set; }
+        public int OrderCount { get; set; }
     }
 }

@@ -25,7 +25,7 @@ import { ProductDetailComponent } from '../../../../user/components/article-deta
 })
 export class ArticleListComponent implements OnInit {
   products: Product[] = [];
-  displayedColumns: string[] = ['name', 'listPrice', 'subCategoryName', 'actions'];
+  displayedColumns: string[] = ['name', 'listPrice', 'categoryName', 'actions'];
 
   constructor(
     private productService: ProductService,
@@ -52,11 +52,11 @@ export class ArticleListComponent implements OnInit {
       data: { id }
     });
   }
-
+  //Modification d'un article
   editArticle(id: number): void {
     this.router.navigate(['/admin/articles', id, 'edit']);
   }
-
+  //Suppression d'un article
   deleteArticle(id: number): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
       this.productService.delete(id).subscribe(() => {

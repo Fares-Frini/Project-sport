@@ -1,3 +1,4 @@
+//Représente une catégorie de produits.
 export interface Category {
     id: number;
     name: string;

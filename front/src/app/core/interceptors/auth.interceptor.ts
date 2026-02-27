@@ -12,7 +12,7 @@ import { TokenService } from '../services/token.service';
 export class AuthInterceptor implements HttpInterceptor {
 
     constructor(private tokenService: TokenService) { }
-
+    //Intercepte chaque requête HTTP sortante pour y ajouter automatiquement le header Authorization: Bearer <token>
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         const token = this.tokenService.getToken();
 
@@ -20,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
             if (!this.tokenService.isTokenExpired(token)) {
                 request = request.clone({
                     setHeaders: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${token}`  //ajout du token dans l'en-tête de la requête
                     }
                 });
             } else {

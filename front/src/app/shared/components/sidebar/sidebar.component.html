@@ -17,6 +17,16 @@
         <span matListItemTitle>Tableau de Bord</span>
     </a>
 
+    <a mat-list-item routerLink="/analytics" routerLinkActive="active-item" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon matListItemIcon>bolt</mat-icon>
+        <span matListItemTitle>Analyses OLTP</span>
+    </a>
+
+    <a mat-list-item routerLink="/analytics/dwh" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>analytics</mat-icon>
+        <span matListItemTitle>Analyses DWH</span>
+    </a>
+
     <a mat-list-item routerLink="/admin/articles" routerLinkActive="active-item">
         <mat-icon matListItemIcon>inventory_2</mat-icon>
         <span matListItemTitle>Produits</span>
@@ -27,18 +37,23 @@
         <span matListItemTitle>Utilisateurs</span>
     </a>
 
+    <a mat-list-item routerLink="/admin/orders" routerLinkActive="active-item">
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <span matListItemTitle>Commandes</span>
+    </a>
+
     <mat-divider></mat-divider>
 
     <div class="sidebar-section p-3">
         <p class="text-muted small text-uppercase">Outils</p>
     </div>
 
-    <a mat-list-item routerLink="/categories" routerLinkActive="active-item">
+    <a mat-list-item routerLink="/admin/categories" routerLinkActive="active-item">
         <mat-icon matListItemIcon>category</mat-icon>
         <span matListItemTitle>Catégories</span>
     </a>
 
-    <a mat-list-item routerLink="/subcategories" routerLinkActive="active-item">
+    <a mat-list-item routerLink="/admin/subcategories" routerLinkActive="active-item">
         <mat-icon matListItemIcon>account_tree</mat-icon>
         <span matListItemTitle>Sous-catégories</span>
     </a>

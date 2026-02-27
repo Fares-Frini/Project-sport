@@ -8,7 +8,7 @@ export class TokenService {
     private readonly TOKEN_KEY = 'auth-token';
 
     constructor() { }
-
+    //Gère uniquement le stockage du JWT dans le localStorage et son décodage pour lire les rôles
     saveToken(token: string): void {
         localStorage.setItem(this.TOKEN_KEY, token);
     }

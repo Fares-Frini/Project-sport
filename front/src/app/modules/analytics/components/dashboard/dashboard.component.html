@@ -1,96 +1,95 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Tableau de Bord</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" (click)="loadDashboardData()">
-            <span data-feather="calendar"></span>
-            Cette année
+<div class="p-4" style="background: #f8f9fc; min-height: 100vh;">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+        <h1 class="h2 brand-font text-primary">📊 Dashboard Analytique OLTP</h1>
+        <button class="btn btn-primary shadow-sm" (click)="loadDashboardData()">
+            <i class="fas fa-sync me-2"></i> Actualiser
         </button>
     </div>
-</div>
 
-<app-kpi-cards [kpis]="kpis"></app-kpi-cards>
-
-<div class="row mb-4" *ngIf="!isLoading">
-    <div class="col-lg-6 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Ventes par Catégorie</h6>
-            </div>
-            <div class="card-body">
-                <app-sales-charts [type]="'bar'" [data]="salesByCategoryData"></app-sales-charts>
-            </div>
-        </div>
+    <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="text-muted mt-2">Récupération des données en cours...</p>
     </div>
 
-    <div class="col-lg-6 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Top 10 Villes</h6>
+    <div *ngIf="!isLoading">
+        <app-kpi-cards [kpis]="kpis" *ngIf="kpis"></app-kpi-cards>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-7">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">📊 Répartition du Catalogue</h6>
+                        <small class="text-muted">Nombre de produits par sous-catégorie</small>
+                    </div>
+                    <div class="card-body" style="height: 350px;">
+                        <canvas *ngIf="salesByCityData" baseChart [data]="salesByCityData" [type]="'bar'"
+                            [options]="{ maintainAspectRatio: false, indexAxis: 'y' }"></canvas>
+                        <div *ngIf="!salesByCityData"
+                            class="d-flex align-items-center justify-content-center h-100 text-muted">Aucune donnée
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <app-sales-charts [type]="'bar'" [data]="salesByCityData"
-                    [options]="{ indexAxis: 'y' }"></app-sales-charts>
+            <div class="col-md-5">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">💳 Tranches de Prix</h6>
+                        <small class="text-muted">Positionnement tarifaire</small>
+                    </div>
+                    <div class="card-body d-flex align-items-center justify-content-center" style="height: 350px;">
+                        <canvas *ngIf="salesByCountryData" baseChart [data]="salesByCountryData" [type]="'doughnut'"
+                            [options]="{ maintainAspectRatio: false }"></canvas>
+                        <div *ngIf="!salesByCountryData" class="text-muted">Aucune donnée</div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row mb-4" *ngIf="!isLoading">
-    <div class="col-lg-8 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Évolution des Ventes</h6>
-            </div>
-            <div class="card-body">
-                <app-sales-charts [type]="'line'" [data]="salesTrendData" [options]="trendOptions"></app-sales-charts>
+        <div class="row g-4 mb-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">🚀 Statut des Commandes (Histogramme)</h6>
+                    </div>
+                    <div class="card-body" style="height: 380px;">
+                        <canvas *ngIf="salesTrendData" baseChart [data]="salesTrendData" [type]="'bar'"
+                            [options]="{ maintainAspectRatio: false, plugins: { legend: { display: false } } }"></canvas>
+                        <div *ngIf="!salesTrendData"
+                            class="d-flex align-items-center justify-content-center h-100 text-muted">Aucune donnée
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Répartition par Pays</h6>
+        <div class="row g-4 mb-4">
+            <div class="col-md-5">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">💰 Revenu par Catégorie</h6>
+                    </div>
+                    <div class="card-body d-flex align-items-center justify-content-center" style="height: 350px;">
+                        <canvas *ngIf="salesByCategoryData" baseChart [data]="salesByCategoryData" [type]="'pie'"
+                            [options]="{ maintainAspectRatio: false }"></canvas>
+                        <div *ngIf="!salesByCategoryData" class="text-muted">Aucune donnée</div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <app-sales-charts [type]="'doughnut'" [data]="salesByCountryData"
-                    [options]="{ maintainAspectRatio: false }"></app-sales-charts>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Répartition par Type (Histogramme)</h6>
-            </div>
-            <div class="card-body">
-                <app-sales-charts [type]="'bar'" [data]="distributionData"
-                    [options]="{ maintainAspectRatio: false }"></app-sales-charts>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mb-4" *ngIf="!isLoading">
-    <div class="col-12 mb-4">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Aperçu Personnes DWH (Histogramme)</h6>
-            </div>
-            <div class="card-body">
-                <app-sales-charts [type]="'bar'" [data]="personsData"
-                    [options]="{ maintainAspectRatio: false, indexAxis: 'y' }"></app-sales-charts>
+            <div class="col-md-7">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">🏆 Top 10 Produits les plus vendus</h6>
+                        <small class="text-muted">Basé sur la quantité totale</small>
+                    </div>
+                    <div class="card-body" style="height: 350px;">
+                        <canvas *ngIf="topSellingProductsData" baseChart [data]="topSellingProductsData" [type]="'bar'"
+                            [options]="{ maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } } }"></canvas>
+                        <div *ngIf="!topSellingProductsData"
+                            class="d-flex align-items-center justify-content-center h-100 text-muted">Aucune donnée
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
-
-<app-top-products-table [products]="topProducts"></app-top-products-table>
-
-<div *ngIf="isLoading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Chargement...</span>
     </div>
 </div>

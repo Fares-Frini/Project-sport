@@ -1,0 +1,140 @@
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3 text-dark font-weight-bold">Gestion des Commandes</h1>
+            <p class="text-muted">Consultez, filtrez et gérez toutes les commandes clients.</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-lg mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Rechercher par client ou #ID</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Client ou 123">
+                        <mat-icon matSuffix>search</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Filtrer par statut</mat-label>
+                        <mat-select (selectionChange)="filterByStatus($event.value)" value="">
+                            <mat-option value="">Tous les statuts</mat-option>
+                            <mat-option value="Pending">En attente</mat-option>
+                            <mat-option value="Processing">En cours</mat-option>
+                            <mat-option value="Shipped">Expédiée</mat-option>
+                            <mat-option value="Delivered">Livrée</mat-option>
+                            <mat-option value="Cancelled">Annulée</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-5">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Période (Date début - Fin)</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Début" [(ngModel)]="startDate"
+                                (dateChange)="onDateChange()">
+                            <input matEndDate placeholder="Fin" [(ngModel)]="endDate" (dateChange)="onDateChange()">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                        <button mat-icon-button matSuffix *ngIf="startDate || endDate" (click)="clearDateRange()"
+                            aria-label="Effacer dates">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="text-center my-5">
+        <mat-spinner diameter="50" class="mx-auto"></mat-spinner>
+        <p class="mt-2">Chargement des commandes...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredOrders.length === 0" class="alert alert-info">
+        Aucune commande trouvée.
+    </div>
+
+    <div *ngIf="!loading && filteredOrders.length > 0" class="table-responsive bg-white rounded-lg shadow-sm">
+        <table class="table table-hover mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th class="text-right">Total</th>
+                    <th>Statut</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of filteredOrders">
+                    <td class="align-middle font-weight-bold">#{{ order.id }}</td>
+                    <td class="align-middle">{{ order.customerName }}</td>
+                    <td class="align-middle text-muted">{{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
+                    <td class="align-middle text-right font-weight-bold">{{ order.totalAmount |
+                        currency:'EUR':'symbol':'1.2-2' }}</td>
+                    <td class="align-middle">
+                        <span class="badge" [ngClass]="{
+              'bg-warning text-dark': order.status === 'Pending',
+              'bg-info text-white': order.status === 'Processing',
+              'bg-primary text-white': order.status === 'Shipped',
+              'bg-success text-white': order.status === 'Delivered',
+              'bg-danger text-white': order.status === 'Cancelled'
+            }">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td class="align-middle text-center">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu d'actions">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="viewDetails(order)">
+                                <mat-icon>visibility</mat-icon>
+                                <span>Détails</span>
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button mat-menu-item (click)="updateStatus(order.id, 'Processing')"
+                                *ngIf="order.status === 'Pending'">
+                                <mat-icon>hourglass_empty</mat-icon>
+                                <span>En cours</span>
+                            </button>
+                            <button mat-menu-item (click)="updateStatus(order.id, 'Shipped')"
+                                *ngIf="order.status === 'Processing'">
+                                <mat-icon>local_shipping</mat-icon>
+                                <span>Expédiée</span>
+                            </button>
+                            <button mat-menu-item (click)="updateStatus(order.id, 'Delivered')"
+                                *ngIf="order.status === 'Shipped'">
+                                <mat-icon>check_circle</mat-icon>
+                                <span>Livrée</span>
+                            </button>
+                            <button mat-menu-item (click)="updateStatus(order.id, 'Cancelled')"
+                                *ngIf="order.status !== 'Cancelled' && order.status !== 'Delivered'">
+                                <mat-icon class="text-danger">cancel</mat-icon>
+                                <span class="text-danger">Annuler</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .badge {
+        padding: .5rem .75rem;
+        border-radius: 50px;
+        font-weight: 500;
+        font-size: 0.75rem;
+    }
+
+    .dropdown-divider {
+        margin: 0.5rem 0;
+    }
+</style>

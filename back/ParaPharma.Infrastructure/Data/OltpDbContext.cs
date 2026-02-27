@@ -15,6 +15,8 @@ namespace ParaPharma.Infrastructure.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,6 +98,32 @@ namespace ParaPharma.Infrastructure.Data
                     .HasMaxLength(50);
                 entity.Property(e => e.Phone)
                     .HasMaxLength(20);
+            });
+
+            // Configuration pour Order
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.TotalAmount).HasPrecision(18, 2);
+                entity.HasOne(e => e.AppUser)
+                    .WithMany()
+                    .HasForeignKey(e => e.AppUserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Configuration pour OrderDetail
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.UnitPrice).HasPrecision(18, 2);
+                entity.HasOne(e => e.Order)
+                    .WithMany(o => o.OrderDetails)
+                    .HasForeignKey(e => e.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Product)
+                    .WithMany()
+                    .HasForeignKey(e => e.ProductId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             base.OnModelCreating(modelBuilder);

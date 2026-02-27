@@ -11,23 +11,29 @@ const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [authGuard],
     children: [
       {
-        path: '',
-        loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)
-      },
-      {
         path: 'admin',
+        canActivate: [authGuard],
         loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule)
       },
       {
-        path: '',
+        path: 'oltp',
+        canActivate: [authGuard],
         loadChildren: () => import('./modules/oltp/oltp.module').then(m => m.OltpModule)
+      },
+      {
+        path: 'analytics',
+        canActivate: [authGuard],
+        loadChildren: () => import('./modules/analytics/analytics.module').then(m => m.AnalyticsModule)
+      },
+      {
+        path: '',
+        loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)
       }
     ]
   },
-  { path: '**', redirectTo: 'auth/login' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

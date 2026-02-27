@@ -23,6 +23,9 @@ export class MainLayoutComponent implements OnInit {
   }
 
   private checkSidebar(url: string): void {
-    this.showSidebar = url.includes('/admin') || url === '/categories' || url === '/subcategories';
+    this.showSidebar = url.includes('/admin') ||
+      url.includes('/analytics') ||
+      url === '/categories' ||
+      url === '/subcategories';
   }
 }

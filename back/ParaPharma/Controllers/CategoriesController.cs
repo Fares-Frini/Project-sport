@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParaPharma.Core.DTOs;
 using ParaPharma.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParaPharma.API.Controllers;
 
@@ -38,6 +39,7 @@ public class CategoriesController : ControllerBase
 
     // POST: api/categories
     [HttpPost]
+    [Authorize(Roles = "admin,Admin")]
     public async Task<ActionResult<CategoryDto>> CreateCategory(CreateCategoryDto createCategoryDto)
     {
         if (!ModelState.IsValid)
@@ -51,6 +53,7 @@ public class CategoriesController : ControllerBase
 
     // PUT: api/categories/5
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin,Admin")]
     public async Task<IActionResult> UpdateCategory(
         [FromRoute] int id,
         [FromBody] UpdateCategoryDto updateCategoryDto)
@@ -74,6 +77,7 @@ public class CategoriesController : ControllerBase
 
     // DELETE: api/categories/5
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin,Admin")]
     public async Task<IActionResult> DeleteCategory(int id)
     {
         var success = await _categoryRepository.DeleteAsync(id);

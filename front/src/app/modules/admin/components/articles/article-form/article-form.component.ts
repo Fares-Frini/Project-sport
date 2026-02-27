@@ -28,7 +28,7 @@ export class ArticleFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) { }
-
+  //creation et modification d'un article
   ngOnInit(): void {
     this.initForm();
     this.loadData();
@@ -66,6 +66,7 @@ export class ArticleFormComponent implements OnInit {
         if (customUrl) {
           this.articleForm.patchValue({ imageUrl: customUrl });
         }
+
       }
     });
   }

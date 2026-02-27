@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using ParaPharma.Core.Interfaces;
 using ParaPharma.Core.DTOs;
+using ParaPharma.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParaPharma.API.Controllers
 {
@@ -38,6 +39,7 @@ namespace ParaPharma.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin,Admin")]
         public async Task<ActionResult<SubCategoryDto>> CreateSubcategory(CreateSubCategoryDto createDto)
         {
             var result = await _repository.AddAsync(createDto);
@@ -45,6 +47,7 @@ namespace ParaPharma.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin,Admin")]
         public async Task<IActionResult> UpdateSubcategory(int id, UpdateSubCategoryDto updateDto)
         {
             if (id != updateDto.Id) return BadRequest();
@@ -54,6 +57,7 @@ namespace ParaPharma.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin,Admin")]
         public async Task<IActionResult> DeleteSubcategory(int id)
         {
             var result = await _repository.DeleteAsync(id);

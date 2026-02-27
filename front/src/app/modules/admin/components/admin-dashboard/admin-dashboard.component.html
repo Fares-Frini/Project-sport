@@ -51,102 +51,72 @@
         </div>
     </div>
 
-    <!-- Charts Section -->
+    <!-- Main Content Section: Category Sales & DWH -->
     <div class="row g-4 mb-5">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="card premium-card glass-effect border-0 h-100">
                 <div class="card-header bg-transparent border-0 p-4">
-                    <h5 class="fw-bold mb-0 brand-font">Évolution des Ventes</h5>
-                </div>
-                <div class="card-body p-4">
-                    <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'">
-                    </canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card premium-card glass-effect border-0 h-100">
-                <div class="card-header bg-transparent border-0 p-4">
-                    <h5 class="fw-bold mb-0 brand-font">Répartition par Catégorie</h5>
+                    <h5 class="fw-bold mb-0 brand-font">📊 Répartition par Catégorie</h5>
+                    <small class="text-muted">Ventes cumulées par catégorie (CRUD)</small>
                 </div>
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
-                    <canvas baseChart [data]="pieChartData" [type]="'pie'">
-                    </canvas>
+                    <div style="max-height: 400px; width: 100%;">
+                        <canvas baseChart [data]="pieChartData" [type]="'pie'">
+                        </canvas>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- DWH Section -->
-    <div class="row g-4 mb-4">
+    <!-- DWH Section (Restored & Fixed) -->
+    <div class="row g-4 mb-4 mt-5">
         <div class="col-12">
             <h5 class="fw-bold text-muted mb-2 brand-font">
                 <span class="badge bg-secondary me-2">DWH</span>
-                Analyses depuis Exam_DWH (Fact_Sales &amp; Dimensions)
+                Analyses depuis Exam_DWH (Vérifié & Opérationnel)
             </h5>
         </div>
     </div>
 
-    <!-- DWH Row 1: PersonType + Top Products -->
     <div class="row g-4 mb-5">
+        <!-- DWH: Person Type -->
         <div class="col-lg-5">
             <div class="card premium-card glass-effect border-0 h-100">
                 <div class="card-header bg-transparent border-0 p-4">
                     <h5 class="fw-bold mb-0 brand-font">Répartition des Personnes (DWH)</h5>
-                    <small class="text-muted">Dim_Person — par type</small>
+                    <small class="text-muted">Analyse démographique (DWH)</small>
                 </div>
                 <div class="card-body p-4 d-flex align-items-center justify-content-center">
                     <canvas baseChart [data]="personTypeChartData" [type]="'bar'"></canvas>
                 </div>
             </div>
         </div>
+        <!-- DWH: Top Products -->
         <div class="col-lg-7">
             <div class="card premium-card glass-effect border-0 h-100">
                 <div class="card-header bg-transparent border-0 p-4">
                     <h5 class="fw-bold mb-0 brand-font">🏆 Top 10 Produits par Revenu (DWH)</h5>
-                    <small class="text-muted">Fact_Sales JOIN Dim_Product</small>
+                    <small class="text-muted">Performance des ventes historiques (DWH)</small>
                 </div>
                 <div class="card-body p-4">
-                    <canvas baseChart [data]="topProductsChartData" [options]="topProductsOptions"
-                        [type]="'bar'"></canvas>
+                    <canvas baseChart [data]="topProductsChartData" [type]="'bar'"
+                        [options]="{ indexAxis: 'y', plugins: { legend: { display: false } } }"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- DWH Row 2: Territory + SalesPerson + CreditCard -->
     <div class="row g-4 mb-5">
-        <div class="col-lg-5">
+        <!-- DWH: Territory -->
+        <div class="col-lg-12">
             <div class="card premium-card glass-effect border-0 h-100">
                 <div class="card-header bg-transparent border-0 p-4">
                     <h5 class="fw-bold mb-0 brand-font">🌍 Ventes par Territoire (DWH)</h5>
-                    <small class="text-muted">Fact_Sales JOIN Dim_SalesTerritory</small>
+                    <small class="text-muted">Répartition géographique (DWH)</small>
                 </div>
                 <div class="card-body p-4">
                     <canvas baseChart [data]="territoryChartData" [type]="'bar'"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card premium-card glass-effect border-0 h-100">
-                <div class="card-header bg-transparent border-0 p-4">
-                    <h5 class="fw-bold mb-0 brand-font">🥇 Top 10 Vendeurs (DWH)</h5>
-                    <small class="text-muted">Fact_Sales JOIN Dim_SalesPerson</small>
-                </div>
-                <div class="card-body p-4">
-                    <canvas baseChart [data]="salesPersonChartData" [options]="salesPersonOptions"
-                        [type]="'bar'"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="card premium-card glass-effect border-0 h-100">
-                <div class="card-header bg-transparent border-0 p-4">
-                    <h5 class="fw-bold mb-0 brand-font">💳 Types de Cartes (DWH)</h5>
-                    <small class="text-muted">Dim_CreditCard</small>
-                </div>
-                <div class="card-body p-4 d-flex align-items-center justify-content-center">
-                    <canvas baseChart [data]="creditCardChartData" [type]="'doughnut'"></canvas>
                 </div>
             </div>
         </div>
@@ -168,21 +138,21 @@
                             </a>
                         </div>
                         <div class="col-sm-3">
-                            <a routerLink="/categories"
+                            <a routerLink="/admin/users"
+                                class="btn btn-premium btn-warning w-100 p-3 d-flex align-items-center justify-content-center gap-2">
+                                <mat-icon>people</mat-icon> Utilisateurs
+                            </a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a routerLink="/admin/categories"
                                 class="btn btn-premium btn-success w-100 p-3 d-flex align-items-center justify-content-center gap-2">
                                 <mat-icon>category</mat-icon> Catégories
                             </a>
                         </div>
                         <div class="col-sm-3">
-                            <a routerLink="/subcategories"
+                            <a routerLink="/admin/subcategories"
                                 class="btn btn-premium btn-info w-100 p-3 d-flex align-items-center justify-content-center gap-2">
                                 <mat-icon>account_tree</mat-icon> Sous-catégories
-                            </a>
-                        </div>
-                        <div class="col-sm-3">
-                            <a routerLink="/admin/users"
-                                class="btn btn-premium btn-warning w-100 p-3 d-flex align-items-center justify-content-center gap-2">
-                                <mat-icon>people</mat-icon> Utilisateurs
                             </a>
                         </div>
                         <div class="col-sm-3">
