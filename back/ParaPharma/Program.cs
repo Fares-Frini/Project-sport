@@ -10,19 +10,6 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add CORS — origins configured via AllowedOrigins (comma-separated) in appsettings / env vars
-var allowedOrigins = builder.Configuration["AllowedOrigins"]
-    ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-    ?? ["http://localhost:4200"];
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAngular",
-        policy => policy.WithOrigins(allowedOrigins)
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
-});
-
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<EtlService>();
@@ -94,8 +81,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
-
-app.UseCors("AllowAngular"); // Add this before Authentication/Authorization
 
 app.UseAuthentication();
 app.UseAuthorization();
